@@ -1,7 +1,12 @@
 /* eslint-disable global-require */
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, YellowBox } from 'react-native';
 import { getStorybookUI, configure } from '@storybook/react-native';
+
+YellowBox.ignoreWarnings([
+  'Warning: componentWillMount is deprecated',
+  'Warning: componentWillReceiveProps is deprecated',
+]);
 
 // import stories
 configure(() => {
