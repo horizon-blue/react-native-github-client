@@ -9,6 +9,7 @@
         devDependencies: ["storybook/**"]
       }
     ],
-    "import/extensions": ["always", { "js": "never" }]
+    "import/extensions": ["always", { "js": "never" }],
+    "no-use-before-define": ["error", { "variables": false }]
   }
 }
