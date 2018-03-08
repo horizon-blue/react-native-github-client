@@ -1,7 +1,11 @@
 import { Navigation } from 'react-native-navigation';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
 import registerScreens from './screens';
 
-registerScreens();
+const client = new ApolloClient({ uri: 'https://api.github.com/graphql' });
+
+registerScreens(client.store, ApolloProvider, client);
 
 Navigation.startTabBasedApp({
   tabs: [
