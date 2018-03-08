@@ -4,15 +4,16 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
+// types
+import type { Node } from 'react';
 
 const client = new ApolloClient({ uri: 'https://api.github.com/graphql' });
 
-export default () => (
+export default (): Node => (
   <ApolloProvider client={client}>
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome to React Native!</Text>
-      <Text style={styles.instructions}>To get started, edit App.js</Text>
-      <Text style={styles.instructions}>hello, world</Text>
+      <Text style={styles.instructions}>hello, world!</Text>
     </View>
   </ApolloProvider>
 );

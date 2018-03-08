@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 import React, { Component } from 'react';
-import { AppRegistry, YellowBox } from 'react-native';
+import { YellowBox } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 import { getStorybookUI, configure } from '@storybook/react-native';
 
 YellowBox.ignoreWarnings([
@@ -26,5 +27,14 @@ class StorybookUIHMRRoot extends Component {
   }
 }
 
-AppRegistry.registerComponent('Profile', () => StorybookUIHMRRoot);
+Navigation.registerComponent('storybook', () => StorybookUIHMRRoot);
+
+Navigation.startSingleScreenApp({
+  screen: {
+    screen: 'storybook',
+    navigatorStyle: {
+      navBarHidden: true,
+    },
+  },
+});
 export default StorybookUIHMRRoot;
