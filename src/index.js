@@ -8,6 +8,9 @@ import registerScreens from './screens';
 // https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
 import { GITHUB_TOKEN } from './config';
 import loadIcons from './utils/loadIcons';
+import disableWarning from './utils/disableWarning';
+
+disableWarning();
 
 const client = new ApolloClient({
   uri: 'https://api.github.com/graphql',
