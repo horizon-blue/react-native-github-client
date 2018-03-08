@@ -41,7 +41,10 @@ const run = icons => {
         title: 'Profile',
         icon: icons.user
       }
-    ]
+    ],
+    tabsStyle: {
+      initialTabIndex: 1
+    }
   });
 };
 
