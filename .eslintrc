@@ -1,8 +1,11 @@
 {
   "parser": "babel-eslint",
-  "plugins": ["import", "react"],
+  "plugins": ["import", "react", "react-native"],
   "rules": {
-    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
+    "react/jsx-filename-extension": [
+      "error",
+      { "extensions": [".js", ".jsx"] }
+    ],
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -13,5 +16,9 @@
     "no-use-before-define": ["error", { "variables": false }],
     "quotes": ["error", "single"],
     "jsx-quotes": ["error", "prefer-double"],
+    "no-undef": "error"
+  },
+  "env": {
+    "react-native/react-native": true
   }
 }

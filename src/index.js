@@ -7,7 +7,7 @@ import registerScreens from './screens';
 // Please follow this link if you want to generate your own personal token:
 // https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
 import { GITHUB_TOKEN } from './config';
-import { iconsMap, iconsLoaded } from './utils/AppIcons';
+import loadIcons from './utils/loadIcons';
 
 const client = new ApolloClient({
   uri: 'https://api.github.com/graphql',
@@ -23,22 +23,23 @@ const client = new ApolloClient({
 
 registerScreens(client.store, ApolloProvider, client);
 
-const run = () => {
+const run = icons => {
   Navigation.startTabBasedApp({
     tabs: [
       {
         label: 'Explore',
         screen: 'profile.main', // placeholder
         title: 'Explore',
-        icon: iconsMap['ios-film-outline']
+        icon: icons.globe
       },
       {
         label: 'User',
         screen: 'profile.main',
-        title: 'Profile'
+        title: 'Profile',
+        icon: icons.user
       }
     ]
   });
 };
 
-if (iconsLoaded) run();
+loadIcons(['user', 'globe']).then(run);
