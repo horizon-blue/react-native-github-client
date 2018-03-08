@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import {
   Container,
   Content,
@@ -13,11 +13,13 @@ import {
   Title
 } from 'native-base';
 import _ from 'lodash';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 // types
 import type { Node } from 'react';
+
+const { width } = Dimensions.get('window');
 
 const GET_BASIC_INFO = gql`
   query {
@@ -56,7 +58,11 @@ type Props = {
 
 // map graphql query item with iconname & labelname
 const profileMap = {
-  login: ['user', 'Username']
+  login: ['face', 'Username'],
+  email: ['mail-outline', 'Email'],
+  company: ['people-outline', 'Company'],
+  location: ['near-me', 'Location'],
+  websiteUrl: ['home', 'Website']
 };
 
 @graphql(GET_BASIC_INFO)
@@ -68,13 +74,13 @@ class Profile extends PureComponent<Props> {
         viewer[queryItem] ? (
           <ListItem icon key={queryItem}>
             <Left>
-              <FontAwesome name={iconName} size={25} />
+              <MaterialIcons name={iconName} size={25} />
             </Left>
             <Body>
               <Text>{labelName}</Text>
             </Body>
-            <Right>
-              <Text>{viewer[queryItem]}</Text>
+            <Right style={styles.listContent}>
+              <Text numberOfLines={1}>{viewer[queryItem]}</Text>
             </Right>
           </ListItem>
         ) : null
@@ -121,6 +127,9 @@ const styles = StyleSheet.create({
   },
   bio: {
     color: 'darkgray'
+  },
+  listContent: {
+    maxWidth: width * 0.6
   }
 });
 
