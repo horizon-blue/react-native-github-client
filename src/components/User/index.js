@@ -12,7 +12,7 @@ import {
   Thumbnail,
   Title
 } from 'native-base';
-import _ from 'lodash';
+import _ from 'lodash/fp';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
@@ -93,18 +93,20 @@ const ListRow = ({ text, iconName, labelName }: ListRowProps): Node => (
 @graphql(GET_BASIC_INFO)
 class Profile extends PureComponent<Props> {
   renderProfileList = viewer =>
-    _.map(
-      profileMap,
-      ([iconName, labelName, callback], queryItem) =>
-        viewer[queryItem] ? (
-          <ListRow
-            key={queryItem}
-            text={callback ? callback(viewer[queryItem]) : viewer[queryItem]}
-            iconName={iconName}
-            labelName={labelName}
-          />
-        ) : null
-    );
+    _.flow(
+      _.entries,
+      _.map(
+        ([queryItem, [iconName, labelName, callback]]) =>
+          viewer[queryItem] ? (
+            <ListRow
+              key={queryItem}
+              text={callback ? callback(viewer[queryItem]) : viewer[queryItem]}
+              iconName={iconName}
+              labelName={labelName}
+            />
+          ) : null
+      )
+    )(profileMap);
 
   render = (): Node => {
     const { data: { loading, viewer } } = this.props;
