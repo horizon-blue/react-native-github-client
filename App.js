@@ -2,20 +2,34 @@
 
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
+import { gql } from 'apollo-boost';
+import { Query } from 'react-apollo';
 // types
 import type { Node } from 'react';
 
-const client = new ApolloClient({ uri: 'https://api.github.com/graphql' });
+const GET_BASIC_INFO = gql`
+  query {
+    viewer {
+      login
+      email
+      bio
+    }
+  }
+`;
 
 export default (): Node => (
-  <ApolloProvider client={client}>
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome to React Native!</Text>
-      <Text style={styles.instructions}>hello, world!</Text>
-    </View>
-  </ApolloProvider>
+  <Query query={GET_BASIC_INFO}>
+    {({ loading, data }) =>
+      (loading ? (
+        <Text>Loading</Text>
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.welcome}>Welcome to React Native!</Text>
+          <Text style={styles.instructions}>{JSON.stringify(data, null, 4)}</Text>
+        </View>
+      ))
+    }
+  </Query>
 );
 
 const styles = StyleSheet.create({
