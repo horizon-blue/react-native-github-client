@@ -16,9 +16,11 @@
     "no-use-before-define": ["error", { "variables": false }],
     "quotes": ["error", "single"],
     "jsx-quotes": ["error", "prefer-double"],
-    "no-undef": "error"
+    "no-undef": "error",
+    "react/display-name": "off",
   },
   "env": {
     "react-native/react-native": true
-  }
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"]
 }

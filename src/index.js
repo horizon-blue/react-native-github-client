@@ -28,13 +28,13 @@ const run = icons => {
     tabs: [
       {
         label: 'Explore',
-        screen: 'profile.main', // placeholder
+        screen: 'explore', // placeholder
         title: 'Explore',
         icon: icons.globe
       },
       {
         label: 'User',
-        screen: 'profile.main',
+        screen: 'profile.user',
         title: 'Profile',
         icon: icons.user
       }

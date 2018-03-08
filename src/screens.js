@@ -1,8 +1,15 @@
 import { Navigation } from 'react-native-navigation';
 
-import Home from './Home';
+import User from './components/User';
+import Explore from './components/Explore';
 
 // register all screens of the app (including internal ones)
 export default (store, Provider, client) => {
-  Navigation.registerComponent('profile.main', () => Home, store, Provider, { client });
+  const registerPage = (name, component) =>
+    Navigation.registerComponent(name, () => component, store, Provider, {
+      client
+    });
+
+  registerPage('profile.user', User);
+  registerPage('explore', Explore);
 };
