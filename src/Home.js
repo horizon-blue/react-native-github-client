@@ -18,14 +18,16 @@ const GET_BASIC_INFO = gql`
 export default (): Node => (
   <Query query={GET_BASIC_INFO}>
     {({ loading, data }) =>
-      (loading ? (
+      loading ? (
         <Text>Loading</Text>
       ) : (
         <View style={styles.container}>
           <Text style={styles.welcome}>Welcome to React Native!</Text>
-          <Text style={styles.instructions}>{JSON.stringify(data, null, 4)}</Text>
+          <Text style={styles.instructions}>
+            {JSON.stringify(data, null, 4)}
+          </Text>
         </View>
-      ))
+      )
     }
   </Query>
 );
@@ -35,16 +37,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
-    margin: 10,
+    margin: 10
   },
   instructions: {
     textAlign: 'center',
     color: '#333333',
-    marginBottom: 5,
-  },
+    marginBottom: 5
+  }
 });
