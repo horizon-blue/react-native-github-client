@@ -8,5 +8,8 @@ export default (icons: Array) =>
   Promise.all(
     _.map(icons, name => Feather.getImageSource(name, SIZE, COLOR))
   ).then(resources => {
-    return _.fromPairs(_.map(icons, (name, index) => [name, resources[index]]));
+    return _.chain(icons)
+      .map((name: String, index: Number) => [name, resources[index]])
+      .fromPairs()
+      .value();
   });
