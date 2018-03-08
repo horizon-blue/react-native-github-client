@@ -16,6 +16,7 @@ import _ from 'lodash';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
+import moment from 'moment';
 // types
 import type { Node } from 'react';
 
@@ -62,7 +63,12 @@ const profileMap = {
   email: ['mail-outline', 'Email'],
   company: ['people-outline', 'Company'],
   location: ['near-me', 'Location'],
-  websiteUrl: ['home', 'Website']
+  websiteUrl: [
+    'home',
+    'Website',
+    url => url.replace(/^http(s?):\/\/|\/$/gi, '')
+  ],
+  createdAt: ['date-range', 'Joined', date => moment(date).format('LL')]
 };
 
 @graphql(GET_BASIC_INFO)
@@ -70,7 +76,7 @@ class Profile extends PureComponent<Props> {
   renderProfileList = viewer =>
     _.map(
       profileMap,
-      ([iconName, labelName], queryItem) =>
+      ([iconName, labelName, callback], queryItem) =>
         viewer[queryItem] ? (
           <ListItem icon key={queryItem}>
             <Left>
@@ -80,7 +86,9 @@ class Profile extends PureComponent<Props> {
               <Text>{labelName}</Text>
             </Body>
             <Right style={styles.listContent}>
-              <Text numberOfLines={1}>{viewer[queryItem]}</Text>
+              <Text numberOfLines={1}>
+                {callback ? callback(viewer[queryItem]) : viewer[queryItem]}
+              </Text>
             </Right>
           </ListItem>
         ) : null
@@ -106,6 +114,7 @@ class Profile extends PureComponent<Props> {
               </Body>
             </ListItem>
             {this.renderProfileList(viewer)}
+            <ListItem itemDivider />
             <ListItem>
               <Text>{JSON.stringify(viewer, null, 4)}</Text>
             </ListItem>
