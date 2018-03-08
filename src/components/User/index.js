@@ -62,14 +62,33 @@ const profileMap = {
   login: ['face', 'Username'],
   email: ['mail-outline', 'Email'],
   company: ['people-outline', 'Company'],
-  location: ['near-me', 'Location'],
+  location: ['my-location', 'Location'],
   websiteUrl: [
-    'home',
+    'link',
     'Website',
     url => url.replace(/^http(s?):\/\/|\/$/gi, '')
   ],
   createdAt: ['date-range', 'Joined', date => moment(date).format('LL')]
 };
+
+type ListRowProps = {
+  text: String | Number,
+  iconName: String,
+  labelName: String
+};
+const ListRow = ({ text, iconName, labelName }: ListRowProps): Node => (
+  <ListItem icon>
+    <Left>
+      <MaterialIcons name={iconName} size={25} />
+    </Left>
+    <Body>
+      <Text>{labelName}</Text>
+    </Body>
+    <Right style={styles.listContent}>
+      <Text numberOfLines={1}>{text}</Text>
+    </Right>
+  </ListItem>
+);
 
 @graphql(GET_BASIC_INFO)
 class Profile extends PureComponent<Props> {
@@ -78,19 +97,12 @@ class Profile extends PureComponent<Props> {
       profileMap,
       ([iconName, labelName, callback], queryItem) =>
         viewer[queryItem] ? (
-          <ListItem icon key={queryItem}>
-            <Left>
-              <MaterialIcons name={iconName} size={25} />
-            </Left>
-            <Body>
-              <Text>{labelName}</Text>
-            </Body>
-            <Right style={styles.listContent}>
-              <Text numberOfLines={1}>
-                {callback ? callback(viewer[queryItem]) : viewer[queryItem]}
-              </Text>
-            </Right>
-          </ListItem>
+          <ListRow
+            key={queryItem}
+            text={callback ? callback(viewer[queryItem]) : viewer[queryItem]}
+            iconName={iconName}
+            labelName={labelName}
+          />
         ) : null
     );
 
@@ -115,6 +127,11 @@ class Profile extends PureComponent<Props> {
             </ListItem>
             {this.renderProfileList(viewer)}
             <ListItem itemDivider />
+            <ListRow
+              iconName="star"
+              labelName="Starred Repositories"
+              text={viewer.starredRepositories.totalCount}
+            />
             <ListItem>
               <Text>{JSON.stringify(viewer, null, 4)}</Text>
             </ListItem>
