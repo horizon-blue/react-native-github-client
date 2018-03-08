@@ -2,7 +2,7 @@ import { Navigation } from 'react-native-navigation';
 import { AsyncStorage } from 'react-native';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
-import registerScreens from './src/screens';
+import registerScreens from './screens';
 // Due to security reason, I cannot include this file in version control
 // Please follow this link if you want to generate your own personal token:
 // https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
