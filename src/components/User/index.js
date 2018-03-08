@@ -1,5 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+import {
+  Container,
+  Content,
+  Header,
+  Left,
+  Body,
+  Right,
+  Title
+} from 'native-base';
 import { gql } from 'apollo-boost';
 import { Query } from 'react-apollo';
 // types
@@ -21,12 +30,14 @@ export default (): Node => (
       loading ? (
         <Text>Loading</Text>
       ) : (
-        <View style={styles.container}>
-          <Text style={styles.welcome}>Welcome to React Native!</Text>
-          <Text style={styles.instructions}>
-            {JSON.stringify(data, null, 4)}
-          </Text>
-        </View>
+        <Container>
+          <Content>
+            <Text style={styles.welcome}>Welcome to React Native!</Text>
+            <Text style={styles.instructions}>
+              {JSON.stringify(data, null, 4)}
+            </Text>
+          </Content>
+        </Container>
       )
     }
   </Query>
