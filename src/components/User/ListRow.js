@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 type Props = {
   text: String | Number,
   iconName: String,
-  labelName: String
+  labelName: String,
 };
 export default ({ text, iconName, labelName, ...props }: Props) => (
   <ListItem icon {...props}>
@@ -26,6 +26,6 @@ const { width } = Dimensions.get('window');
 
 const styles: Object = StyleSheet.create({
   listContent: {
-    maxWidth: width * 0.6
-  }
+    maxWidth: width * 0.6,
+  },
 });

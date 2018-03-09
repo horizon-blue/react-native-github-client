@@ -18,10 +18,10 @@ const client = new ApolloClient({
     const token = await AsyncStorage.getItem('token');
     operation.setContext({
       headers: {
-        authorization: `Bearer ${token || GITHUB_TOKEN}`
-      }
+        authorization: `Bearer ${token || GITHUB_TOKEN}`,
+      },
     });
-  }
+  },
 });
 
 registerScreens(client.store, ApolloProvider, client);
@@ -33,18 +33,18 @@ const run = icons => {
         label: 'Explore',
         screen: 'explore', // placeholder
         title: 'Explore',
-        icon: icons.globe
+        icon: icons.globe,
       },
       {
         label: 'User',
         screen: 'profile.user',
         title: 'Profile',
-        icon: icons.user
-      }
+        icon: icons.user,
+      },
     ],
     tabsStyle: {
-      initialTabIndex: 1
-    }
+      initialTabIndex: 1,
+    },
   });
 };
 

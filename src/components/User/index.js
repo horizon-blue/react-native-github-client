@@ -11,7 +11,7 @@ import {
   Title,
   Col,
   Row,
-  Grid
+  Grid,
 } from 'native-base';
 import _ from 'lodash/fp';
 import { gql } from 'apollo-boost';
@@ -62,16 +62,16 @@ const profileMap = {
     'link',
     'Website',
     url => url.replace(/^http(s?):\/\/|\/$/gi, ''),
-    openURL
+    openURL,
   ],
-  createdAt: ['date-range', 'Joined', date => moment(date).format('LL')]
+  createdAt: ['date-range', 'Joined', date => moment(date).format('LL')],
 };
 
 type Props = {
   data: {
     loading: Boolean,
-    viewer: Object
-  }
+    viewer: Object,
+  },
 };
 
 @graphql(GET_BASIC_INFO)
@@ -165,14 +165,14 @@ const styles = StyleSheet.create({
   centerContainer: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   avatar: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   bio: {
-    color: 'darkgray'
-  }
+    color: 'darkgray',
+  },
 });
 
 export default Profile;
