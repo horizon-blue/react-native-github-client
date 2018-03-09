@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
-import { Container, Text, List, ListItem } from 'native-base';
+import { Container, Text, List, ListItem, Grid, Row, View } from 'native-base';
 import { graphql } from 'react-apollo';
+import Octicons from 'react-native-vector-icons/Octicons';
 import _ from 'lodash/fp';
 
 import { REPOSITORIES, STARRED_REPOSITORIES } from './queries';
@@ -49,8 +50,38 @@ class RepositoryList extends PureComponent<Props> {
       onPress={openURL(node.url)}
       style={node.isPrivate ? styles.privateRepo : null}
     >
-      <Text>{node.name}</Text>
-      <Text note>{JSON.stringify(node, null, 4)}</Text>
+      <Grid>
+        <Row>
+          <Octicons name="repo" size={20} />
+          <Text>{node.name}</Text>
+        </Row>
+        <Row>
+          <Text note>{node.description}</Text>
+        </Row>
+        <Row>
+          {!!node.forkCount && (
+            <View style={styles.bottomTag}>
+              <Octicons name="repo-forked" />
+              <Text>{node.forkCount}</Text>
+            </View>
+          )}
+          {!!node.stargazers.totalCount && (
+            <View style={styles.bottomTag}>
+              <Octicons name="star" />
+              <Text>{node.stargazers.totalCount}</Text>
+            </View>
+          )}
+          {!!node.primaryLanguage && (
+            <View style={styles.bottomTag}>
+              <Octicons
+                name="primitive-dot"
+                color={node.primaryLanguage.color}
+              />
+              <Text>{node.primaryLanguage.name}</Text>
+            </View>
+          )}
+        </Row>
+      </Grid>
     </ListItem>
   );
 
@@ -86,6 +117,7 @@ const styles = StyleSheet.create({
   privateRepo: {
     backgroundColor: '#FFFDF0',
   },
+  bottomTag: { flexDirection: 'row' },
 });
 
 export default RepositoryList;
