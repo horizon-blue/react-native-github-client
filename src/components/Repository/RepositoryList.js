@@ -6,7 +6,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import _ from 'lodash/fp';
 
 import { REPOSITORIES, STARRED_REPOSITORIES } from './queries';
-import { deepMerge } from 'Profile/src/utils';
+import { deepMerge, openWebView } from 'Profile/src/utils';
 
 /**
  * A helper function that transform fetched result to props
@@ -21,8 +21,7 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
       fetchMore: () => {},
     };
 
-  const { repositories, starredRepositories } = viewer;
-  const repo = ownProps.isStarredPage ? starredRepositories : repositories;
+  const repo = viewer[ownProps.repoType];
 
   return {
     repositories: _.reverse(repo.edges),
@@ -37,26 +36,20 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
 };
 
 @graphql(REPOSITORIES, {
-  skip: props => props.isStarredPage,
+  skip: props => props.repoType !== 'repositories',
   props: transformProps,
 })
 @graphql(STARRED_REPOSITORIES, {
-  skip: props => !props.isStarredPage,
+  skip: props => props.repoType !== 'starredRepositories',
   props: transformProps,
 })
 class RepositoryList extends PureComponent<Props> {
   repoKeyExtractor = repo => repo.node.id;
 
-  handleClickLink = uri => () =>
-    this.props.navigator.push({
-      screen: 'profile.webview',
-      passProps: { uri },
-    });
-
   renderRepo = ({ item: { node } }) => (
     <View style={node.isPrivate ? styles.privateRepo : null}>
       <ListItem
-        onPress={this.handleClickLink(node.url)}
+        onPress={openWebView(node.url, this.props.navigator)}
         style={styles.listItem}
       >
         <Grid>
@@ -127,16 +120,15 @@ type Props = {
     viewer: Object,
   },
   navigator: Object,
-  isStarredPage: Boolean,
+  repoType: String,
 };
 
 const styles = StyleSheet.create({
   privateRepo: {
     backgroundColor: '#FFFDF0',
-    marginLeft: 5,
   },
   listItem: { paddingRight: 10 },
-  repoName: { fontWeight: 'bold' },
+  repoName: { fontWeight: 'bold', marginLeft: 5 },
   description: { marginTop: 10, marginBottom: 10 },
   bottomTag: { flexDirection: 'row' },
   bottomTagText: { fontSize: 14, marginRight: 10, marginLeft: 3 },

@@ -11,6 +11,19 @@ export const openURL = url => () =>
   Linking.openURL(url).catch(error => console.log(error));
 
 /**
+ * Given a link and a reference to navigator, push the webview on top of the
+ * current screen stack
+ * @param  {String} uri       the link to open
+ * @param  {Object} navigator a reference to the navigator object
+ * @return {funcion}           a function, when triggered, push the webview
+ */
+export const openWebView = (uri, navigator) => () =>
+  navigator.push({
+    screen: 'profile.webview',
+    passProps: { uri },
+  });
+
+/**
  * A helper function that recursively merge two objects without mutation
  * @param  {Object} objA the desination object
  * @param  {Object} objB the source object

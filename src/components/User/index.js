@@ -102,14 +102,14 @@ class Profile extends PureComponent<Props> {
     this.props.navigator.push({
       screen: 'profile.repository.list',
       title: 'Starred Repositories',
-      passProps: { isStarredPage: true },
+      passProps: { repoType: 'starredRepositories' },
     });
 
   handlePressOwnRepo = () =>
     this.props.navigator.push({
       screen: 'profile.repository.list',
       title: 'Owned Repositories',
-      passProps: { isStarredPage: false },
+      passProps: { repoType: 'repositories' },
     });
 
   render = (): Node => {
