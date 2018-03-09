@@ -1,14 +1,12 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
   Container,
   Content,
   Text,
   List,
   ListItem,
-  Left,
   Body,
-  Right,
   Thumbnail,
   Title,
   Col,
@@ -16,14 +14,14 @@ import {
   Grid
 } from 'native-base';
 import _ from 'lodash/fp';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 import moment from 'moment';
 // types
 import type { Node } from 'react';
 
-const { width } = Dimensions.get('window');
+import { openURL } from 'Profile/src/utils';
+import ListRow from './ListRow';
 
 const GET_BASIC_INFO = gql`
   query {
@@ -57,35 +55,17 @@ const GET_BASIC_INFO = gql`
 // map graphql query item with iconname & labelname
 const profileMap = {
   login: ['face', 'Username'],
-  email: ['mail-outline', 'Email'],
+  email: ['mail-outline', 'Email', null, email => openURL('mailto:' + email)],
   company: ['people-outline', 'Company'],
   location: ['my-location', 'Location'],
   websiteUrl: [
     'link',
     'Website',
-    url => url.replace(/^http(s?):\/\/|\/$/gi, '')
+    url => url.replace(/^http(s?):\/\/|\/$/gi, ''),
+    openURL
   ],
   createdAt: ['date-range', 'Joined', date => moment(date).format('LL')]
 };
-
-type ListRowProps = {
-  text: String | Number,
-  iconName: String,
-  labelName: String
-};
-const ListRow = ({ text, iconName, labelName, ...props }: ListRowProps) => (
-  <ListItem icon {...props}>
-    <Left>
-      <MaterialIcons name={iconName} size={25} />
-    </Left>
-    <Body>
-      <Text>{labelName}</Text>
-    </Body>
-    <Right style={styles.listContent}>
-      <Text numberOfLines={1}>{text}</Text>
-    </Right>
-  </ListItem>
-);
 
 type Props = {
   data: {
@@ -100,13 +80,14 @@ class Profile extends PureComponent<Props> {
     _.flow(
       _.entries,
       _.map(
-        ([queryItem, [iconName, labelName, callback]]) =>
+        ([queryItem, [iconName, labelName, callback, onPressFunc]]) =>
           viewer[queryItem] ? (
             <ListRow
               key={queryItem}
               text={callback ? callback(viewer[queryItem]) : viewer[queryItem]}
               iconName={iconName}
               labelName={labelName}
+              onPress={onPressFunc ? onPressFunc(viewer[queryItem]) : null}
             />
           ) : null
       )
@@ -191,9 +172,6 @@ const styles = StyleSheet.create({
   },
   bio: {
     color: 'darkgray'
-  },
-  listContent: {
-    maxWidth: width * 0.6
   }
 });
 
