@@ -13,7 +13,7 @@
       }
     ],
     "import/extensions": ["error", { "js": "never" }],
-    "no-use-before-define": ["error", { "variables": false }],
+    "no-use-before-define": "off",
     "quotes": ["error", "single"],
     "jsx-quotes": ["error", "prefer-double"],
     "no-undef": "error",
