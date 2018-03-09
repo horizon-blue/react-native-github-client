@@ -64,7 +64,7 @@ class RepositoryList extends PureComponent<Props> {
           <Row>
             <Octicons name="repo" size={18} />
             <Text style={styles.repoName} numberOfLines={1}>
-              {this.props.repoType !== 'repositories'
+              {this.props.repoType === 'repositories'
                 ? node.name
                 : node.nameWithOwner}
             </Text>
@@ -75,20 +75,6 @@ class RepositoryList extends PureComponent<Props> {
             </Text>
           </Row>
           <Row>
-            {!!node.forkCount && (
-              <View style={styles.bottomTag}>
-                <Octicons size={15} name="repo-forked" />
-                <Text style={styles.bottomTagText}>{node.forkCount}</Text>
-              </View>
-            )}
-            {!!node.stargazers.totalCount && (
-              <View style={styles.bottomTag}>
-                <Octicons size={15} name="star" />
-                <Text style={styles.bottomTagText}>
-                  {node.stargazers.totalCount}
-                </Text>
-              </View>
-            )}
             {!!node.primaryLanguage && (
               <View style={styles.bottomTag}>
                 <Octicons
@@ -99,6 +85,20 @@ class RepositoryList extends PureComponent<Props> {
                 <Text style={styles.bottomTagText}>
                   {node.primaryLanguage.name}
                 </Text>
+              </View>
+            )}
+            {!!node.stargazers.totalCount && (
+              <View style={styles.bottomTag}>
+                <Octicons size={15} name="star" />
+                <Text style={styles.bottomTagText}>
+                  {node.stargazers.totalCount}
+                </Text>
+              </View>
+            )}
+            {!!node.forkCount && (
+              <View style={styles.bottomTag}>
+                <Octicons size={15} name="repo-forked" />
+                <Text style={styles.bottomTagText}>{node.forkCount}</Text>
               </View>
             )}
           </Row>
