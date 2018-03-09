@@ -6,7 +6,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import _ from 'lodash/fp';
 
 import { REPOSITORIES, STARRED_REPOSITORIES } from './queries';
-import { deepMerge, openURL } from 'Profile/src/utils';
+import { deepMerge } from 'Profile/src/utils';
 
 /**
  * A helper function that transform fetched result to props
