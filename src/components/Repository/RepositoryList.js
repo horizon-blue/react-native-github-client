@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { Container, Text, List, ListItem } from 'native-base';
 import { graphql } from 'react-apollo';
 import _ from 'lodash/fp';
@@ -45,7 +45,10 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
 })
 class RepositoryList extends PureComponent<Props> {
   renderRepo = ({ item: { node } }) => (
-    <ListItem onPress={openURL(node.url)}>
+    <ListItem
+      onPress={openURL(node.url)}
+      style={node.isPrivate ? styles.privateRepo : null}
+    >
       <Text>{node.name}</Text>
       <Text note>{JSON.stringify(node, null, 4)}</Text>
     </ListItem>
@@ -78,5 +81,11 @@ type Props = {
   navigator: Object,
   isStarredPage: Boolean,
 };
+
+const styles = StyleSheet.create({
+  privateRepo: {
+    backgroundColor: '#FFFDF0',
+  },
+});
 
 export default RepositoryList;

@@ -13,6 +13,7 @@ edges {
       name
     }
     url
+    isPrivate
     forkCount
     stargazers {
       totalCount
