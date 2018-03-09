@@ -5,11 +5,7 @@ import { graphql } from 'react-apollo';
 import Octicons from 'react-native-vector-icons/Octicons';
 import _ from 'lodash/fp';
 
-import {
-  REPOSITORIES,
-  STARRED_REPOSITORIES,
-  WATCHING_REPOSITORIES,
-} from './queries';
+import { getQuery } from './queries';
 import { deepMerge, openWebView } from 'Profile/src/utils';
 
 /**
@@ -39,15 +35,15 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
   };
 };
 
-@graphql(REPOSITORIES, {
+@graphql(getQuery('repositories', 'affiliations: OWNER'), {
   skip: props => props.repoType !== 'repositories',
   props: transformProps,
 })
-@graphql(STARRED_REPOSITORIES, {
+@graphql(getQuery('starredRepositories'), {
   skip: props => props.repoType !== 'starredRepositories',
   props: transformProps,
 })
-@graphql(WATCHING_REPOSITORIES, {
+@graphql(getQuery('watching'), {
   skip: props => props.repoType !== 'watching',
   props: transformProps,
 })

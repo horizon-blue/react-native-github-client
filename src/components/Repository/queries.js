@@ -1,57 +1,37 @@
 import { gql } from 'apollo-boost';
 
-const REPO_INFO = `
-edges {
-  node {
-    id
-    nameWithOwner
-    name
-    description
-    viewerHasStarred
-    primaryLanguage {
-      id
-      color
-      name
-    }
-    url
-    isPrivate
-    forkCount
-    stargazers {
-      totalCount
-    }
-  }
-  cursor
-}
-`;
-
-export const REPOSITORIES = gql`
+/**
+ * Return the graphql query for given fields
+ * @param  {String} field field to be quired
+ * @param  {String} rest  optional, additional arguments
+ * @return {Object}       graphql query
+ */
+export const getQuery = (field: String, rest: ?String) => gql`
   query($before: String) {
     viewer {
       id
-      repositories(affiliations: OWNER, last: 10, before: $before) {
-        ${REPO_INFO}
-      }
-    }
-  }
-`;
-
-export const STARRED_REPOSITORIES = gql`
-  query($before: String) {
-    viewer {
-      id
-      starredRepositories(last: 10, before: $before) {
-        ${REPO_INFO}
-      }
-    }
-  }
-`;
-
-export const WATCHING_REPOSITORIES = gql`
-  query($before: String) {
-    viewer {
-      id
-      watching(last: 10, before: $before) {
-        ${REPO_INFO}
+      ${field}(last: 10, before: $before, ${rest || ''}) {
+        edges {
+          node {
+            id
+            nameWithOwner
+            name
+            description
+            viewerHasStarred
+            primaryLanguage {
+              id
+              color
+              name
+            }
+            url
+            isPrivate
+            forkCount
+            stargazers {
+              totalCount
+            }
+          }
+          cursor
+        }
       }
     }
   }
