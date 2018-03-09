@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import {
   Container,
   Content,
@@ -10,7 +10,10 @@ import {
   Body,
   Right,
   Thumbnail,
-  Title
+  Title,
+  Col,
+  Row,
+  Grid
 } from 'native-base';
 import _ from 'lodash/fp';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -25,6 +28,7 @@ const { width } = Dimensions.get('window');
 const GET_BASIC_INFO = gql`
   query {
     viewer {
+      id
       login
       email
       bio
@@ -40,7 +44,7 @@ const GET_BASIC_INFO = gql`
       following {
         totalCount
       }
-      repositories {
+      repositories(affiliations: OWNER) {
         totalCount
       }
       starredRepositories {
@@ -49,13 +53,6 @@ const GET_BASIC_INFO = gql`
     }
   }
 `;
-
-type Props = {
-  data: {
-    loading: Boolean,
-    viewer: Object
-  }
-};
 
 // map graphql query item with iconname & labelname
 const profileMap = {
@@ -76,8 +73,8 @@ type ListRowProps = {
   iconName: String,
   labelName: String
 };
-const ListRow = ({ text, iconName, labelName }: ListRowProps): Node => (
-  <ListItem icon>
+const ListRow = ({ text, iconName, labelName, ...props }: ListRowProps) => (
+  <ListItem icon {...props}>
     <Left>
       <MaterialIcons name={iconName} size={25} />
     </Left>
@@ -89,6 +86,13 @@ const ListRow = ({ text, iconName, labelName }: ListRowProps): Node => (
     </Right>
   </ListItem>
 );
+
+type Props = {
+  data: {
+    loading: Boolean,
+    viewer: Object
+  }
+};
 
 @graphql(GET_BASIC_INFO)
 class Profile extends PureComponent<Props> {
@@ -109,15 +113,17 @@ class Profile extends PureComponent<Props> {
     )(profileMap);
 
   render = (): Node => {
-    const { data: { loading, viewer } } = this.props;
+    const { data: { loading, viewer, error } } = this.props;
     return loading ? (
       <Text>Loading</Text>
+    ) : error ? (
+      <Text>Connection error</Text>
     ) : (
       <Container>
         <Content>
           <List>
             <ListItem noBorder>
-              <Body style={styles.avatarContainer}>
+              <Body style={styles.centerContainer}>
                 <Thumbnail
                   large
                   source={{ uri: viewer.avatarUrl }}
@@ -127,6 +133,34 @@ class Profile extends PureComponent<Props> {
                 <Text style={styles.bio}>{viewer.bio}</Text>
               </Body>
             </ListItem>
+            <ListItem>
+              <Body style={{ flex: 3 }}>
+                <Grid>
+                  <Col>
+                    <TouchableOpacity style={styles.centerContainer}>
+                      <Row>
+                        <Text>Followers</Text>
+                      </Row>
+                      <Row>
+                        <Text note>{viewer.followers.totalCount}</Text>
+                      </Row>
+                    </TouchableOpacity>
+                  </Col>
+                  <Col>
+                    <TouchableOpacity style={styles.centerContainer}>
+                      <Row>
+                        <Text>Following</Text>
+                      </Row>
+                      <Row>
+                        <Text note>{viewer.following.totalCount}</Text>
+                      </Row>
+                    </TouchableOpacity>
+                  </Col>
+                </Grid>
+              </Body>
+            </ListItem>
+            <ListItem itemDivider />
+
             {this.renderProfileList(viewer)}
             <ListItem itemDivider />
             <ListRow
@@ -134,9 +168,11 @@ class Profile extends PureComponent<Props> {
               labelName="Starred Repositories"
               text={viewer.starredRepositories.totalCount}
             />
-            <ListItem>
-              <Text>{JSON.stringify(viewer, null, 4)}</Text>
-            </ListItem>
+            <ListRow
+              iconName="device-hub"
+              labelName="Owned Repositories"
+              text={viewer.repositories.totalCount}
+            />
           </List>
         </Content>
       </Container>
@@ -145,7 +181,7 @@ class Profile extends PureComponent<Props> {
 }
 
 const styles = StyleSheet.create({
-  avatarContainer: {
+  centerContainer: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center'
