@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { ListItem, Left, Body, Right, Text } from 'native-base';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
 
 type Props = {
   text: String | Number,
@@ -11,7 +11,7 @@ type Props = {
 export default ({ text, iconName, labelName, ...props }: Props) => (
   <ListItem icon {...props}>
     <Left>
-      <MaterialIcons name={iconName} size={25} />
+      <Octicons name={iconName} size={25} />
     </Left>
     <Body>
       <Text>{labelName}</Text>

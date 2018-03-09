@@ -25,17 +25,17 @@ import ListRow from './ListRow';
 
 // map graphql query item with iconname & labelname
 const profileMap = {
-  login: ['face', 'Username'],
-  email: ['mail-outline', 'Email', null, email => openURL('mailto:' + email)],
-  company: ['people-outline', 'Company'],
-  location: ['my-location', 'Location'],
+  login: ['octoface', 'Username'],
+  email: ['mail', 'Email', null, email => openURL('mailto:' + email)],
+  company: ['organization', 'Company'],
+  location: ['location', 'Location'],
   websiteUrl: [
     'link',
     'Website',
     url => url.replace(/^http(s?):\/\/|\/$/gi, ''),
     openURL,
   ],
-  createdAt: ['date-range', 'Joined', date => moment(date).format('LL')],
+  createdAt: ['calendar', 'Joined', date => moment(date).format('LL')],
 };
 
 type Props = {
@@ -176,7 +176,7 @@ class Profile extends PureComponent<Props> {
               onPress={this.handlePressStarRepo}
             />
             <ListRow
-              iconName="device-hub"
+              iconName="repo"
               labelName="Owned Repositories"
               text={viewer.repositories.totalCount}
               onPress={this.handlePressOwnRepo}
