@@ -45,9 +45,20 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
   props: transformProps,
 })
 class RepositoryList extends PureComponent<Props> {
+  repoKeyExtractor = repo => repo.node.id;
+
+  handleClickLink = uri => () =>
+    this.props.navigator.push({
+      screen: 'profile.webview',
+      passProps: { uri },
+    });
+
   renderRepo = ({ item: { node } }) => (
     <View style={node.isPrivate ? styles.privateRepo : null}>
-      <ListItem onPress={openURL(node.url)} style={styles.listItem}>
+      <ListItem
+        onPress={this.handleClickLink(node.url)}
+        style={styles.listItem}
+      >
         <Grid>
           <Row>
             <Octicons name="repo" size={18} />
@@ -92,8 +103,6 @@ class RepositoryList extends PureComponent<Props> {
       </ListItem>
     </View>
   );
-
-  repoKeyExtractor = repo => repo.node.id;
 
   render = () => {
     return (
