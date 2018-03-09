@@ -1,6 +1,6 @@
 import { Navigation } from 'react-native-navigation';
 
-import User from './components/User';
+import { User, UserList } from './components/User';
 import Explore from './components/Explore';
 import { RepositoryList } from './components/Repository';
 import WebView from './components/WebView';
@@ -13,6 +13,7 @@ export default (store, Provider, client) => {
     });
 
   registerPage('profile.user', User);
+  registerPage('profile.user.list', UserList);
   registerPage('explore', Explore);
   registerPage('profile.repository.list', RepositoryList);
   registerPage('profile.webview', WebView);

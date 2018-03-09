@@ -17,7 +17,6 @@ export const getQuery = (field: String, rest: ?String) => gql`
             nameWithOwner
             name
             description
-            viewerHasStarred
             primaryLanguage {
               id
               color
