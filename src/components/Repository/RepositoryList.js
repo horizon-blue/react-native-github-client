@@ -5,7 +5,11 @@ import { graphql } from 'react-apollo';
 import Octicons from 'react-native-vector-icons/Octicons';
 import _ from 'lodash/fp';
 
-import { REPOSITORIES, STARRED_REPOSITORIES } from './queries';
+import {
+  REPOSITORIES,
+  STARRED_REPOSITORIES,
+  WATCHING_REPOSITORIES,
+} from './queries';
 import { deepMerge, openWebView } from 'Profile/src/utils';
 
 /**
@@ -43,6 +47,10 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
   skip: props => props.repoType !== 'starredRepositories',
   props: transformProps,
 })
+@graphql(WATCHING_REPOSITORIES, {
+  skip: props => props.repoType !== 'watching',
+  props: transformProps,
+})
 class RepositoryList extends PureComponent<Props> {
   repoKeyExtractor = repo => repo.node.id;
 
@@ -56,7 +64,9 @@ class RepositoryList extends PureComponent<Props> {
           <Row>
             <Octicons name="repo" size={18} />
             <Text style={styles.repoName} numberOfLines={1}>
-              {this.props.isStarredPage ? node.nameWithOwner : node.name}
+              {this.props.repoType !== 'repositories'
+                ? node.name
+                : node.nameWithOwner}
             </Text>
           </Row>
           <Row style={styles.description}>

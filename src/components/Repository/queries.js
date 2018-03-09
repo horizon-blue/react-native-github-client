@@ -45,3 +45,14 @@ export const STARRED_REPOSITORIES = gql`
     }
   }
 `;
+
+export const WATCHING_REPOSITORIES = gql`
+  query($before: String) {
+    viewer {
+      id
+      watching(last: 10, before: $before) {
+        ${REPO_INFO}
+      }
+    }
+  }
+`;
