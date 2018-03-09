@@ -35,18 +35,6 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
   };
 };
 
-@graphql(getQuery('repositories', 'affiliations: OWNER'), {
-  skip: props => props.repoType !== 'repositories',
-  props: transformProps,
-})
-@graphql(getQuery('starredRepositories'), {
-  skip: props => props.repoType !== 'starredRepositories',
-  props: transformProps,
-})
-@graphql(getQuery('watching'), {
-  skip: props => props.repoType !== 'watching',
-  props: transformProps,
-})
 class RepositoryList extends PureComponent<Props> {
   repoKeyExtractor = repo => repo.node.id;
 
@@ -140,4 +128,14 @@ const styles = StyleSheet.create({
   bottomTagText: { fontSize: 14, marginRight: 10, marginLeft: 3 },
 });
 
-export default RepositoryList;
+// Compose queires
+export default _.reduce((result, [field, rest]) =>
+  graphql(getQuery(field, rest), {
+    skip: props => props.repoType !== field,
+    props: transformProps,
+  })(result)
+)(RepositoryList)([
+  ['repositories', 'affiliations: OWNER'],
+  ['starredRepositories'],
+  ['watching'],
+]);
