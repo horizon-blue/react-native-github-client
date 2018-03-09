@@ -12,6 +12,7 @@ edges {
       color
       name
     }
+    url
     forkCount
     stargazers {
       totalCount

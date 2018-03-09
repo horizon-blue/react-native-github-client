@@ -5,7 +5,7 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash/fp';
 
 import { REPOSITORIES, STARRED_REPOSITORIES } from './queries';
-import { deepMerge } from 'Profile/src/utils';
+import { deepMerge, openURL } from 'Profile/src/utils';
 
 /**
  * A helper function that transform fetched result to props
@@ -44,9 +44,10 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
   props: transformProps,
 })
 class RepositoryList extends PureComponent<Props> {
-  renderRepo = ({ item }) => (
-    <ListItem>
-      <Text>{JSON.stringify(item, null, 4)}</Text>
+  renderRepo = ({ item: { node } }) => (
+    <ListItem onPress={openURL(node.url)}>
+      <Text>{node.name}</Text>
+      <Text note>{JSON.stringify(node, null, 4)}</Text>
     </ListItem>
   );
 
