@@ -48,4 +48,6 @@ const run = icons => {
   });
 };
 
-loadIcons(['user', 'globe']).then(run);
+loadIcons(['user', 'globe'])
+  .then(run)
+  .catch(error => console.error(error));

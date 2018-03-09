@@ -1,29 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Container, Content, H1, View } from 'native-base';
 // types
 import type { Node } from 'react';
 
 export default (): Node => (
-  <View style={styles.container}>
-    <Text style={styles.welcome}>TODO: Explore page</Text>
-  </View>
+  <Container>
+    <Content>
+      <View style={styles.centerContainer}>
+        <H1>TODO</H1>
+      </View>
+    </Content>
+  </Container>
 );
 
 const styles = StyleSheet.create({
-  container: {
+  centerContainer: {
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });

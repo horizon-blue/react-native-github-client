@@ -18,7 +18,8 @@
     "jsx-quotes": ["error", "prefer-double"],
     "no-undef": "error",
     "react/display-name": "off",
-    "comma-dangle": ["error", "always-multiline"]
+    "comma-dangle": ["error", "always-multiline"],
+    "no-console": "off"
   },
   "env": {
     "react-native/react-native": true

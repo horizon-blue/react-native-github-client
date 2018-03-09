@@ -23,7 +23,30 @@ import type { Node } from 'react';
 import { openURL } from 'Profile/src/utils';
 import ListRow from './ListRow';
 
-const GET_BASIC_INFO = gql`
+// map graphql query item with iconname & labelname
+const profileMap = {
+  login: ['face', 'Username'],
+  email: ['mail-outline', 'Email', null, email => openURL('mailto:' + email)],
+  company: ['people-outline', 'Company'],
+  location: ['my-location', 'Location'],
+  websiteUrl: [
+    'link',
+    'Website',
+    url => url.replace(/^http(s?):\/\/|\/$/gi, ''),
+    openURL,
+  ],
+  createdAt: ['date-range', 'Joined', date => moment(date).format('LL')],
+};
+
+type Props = {
+  data: {
+    loading: Boolean,
+    viewer: Object,
+  },
+  navigator: Object,
+};
+
+@graphql(gql`
   query {
     viewer {
       id
@@ -50,31 +73,7 @@ const GET_BASIC_INFO = gql`
       }
     }
   }
-`;
-
-// map graphql query item with iconname & labelname
-const profileMap = {
-  login: ['face', 'Username'],
-  email: ['mail-outline', 'Email', null, email => openURL('mailto:' + email)],
-  company: ['people-outline', 'Company'],
-  location: ['my-location', 'Location'],
-  websiteUrl: [
-    'link',
-    'Website',
-    url => url.replace(/^http(s?):\/\/|\/$/gi, ''),
-    openURL,
-  ],
-  createdAt: ['date-range', 'Joined', date => moment(date).format('LL')],
-};
-
-type Props = {
-  data: {
-    loading: Boolean,
-    viewer: Object,
-  },
-};
-
-@graphql(GET_BASIC_INFO)
+`)
 class Profile extends PureComponent<Props> {
   renderProfileList = viewer =>
     _.flow(
@@ -92,6 +91,26 @@ class Profile extends PureComponent<Props> {
           ) : null
       )
     )(profileMap);
+
+  handlePressFollower = () =>
+    this.props.navigator.push({ screen: 'profile.repository.list' });
+
+  handlePressFollowing = () =>
+    this.props.navigator.push({ screen: 'profile.repository.list' });
+
+  handlePressStarRepo = () =>
+    this.props.navigator.push({
+      screen: 'profile.repository.list',
+      title: 'Starred Repositories',
+      passProps: { isStarredPage: true },
+    });
+
+  handlePressOwnRepo = () =>
+    this.props.navigator.push({
+      screen: 'profile.repository.list',
+      title: 'Owned Repositories',
+      passProps: { isStarredPage: false },
+    });
 
   render = (): Node => {
     const { data: { loading, viewer, error } } = this.props;
@@ -118,7 +137,10 @@ class Profile extends PureComponent<Props> {
               <Body style={{ flex: 3 }}>
                 <Grid>
                   <Col>
-                    <TouchableOpacity style={styles.centerContainer}>
+                    <TouchableOpacity
+                      style={styles.centerContainer}
+                      onPress={this.handlePressFollower}
+                    >
                       <Row>
                         <Text>Followers</Text>
                       </Row>
@@ -128,7 +150,10 @@ class Profile extends PureComponent<Props> {
                     </TouchableOpacity>
                   </Col>
                   <Col>
-                    <TouchableOpacity style={styles.centerContainer}>
+                    <TouchableOpacity
+                      style={styles.centerContainer}
+                      onPress={this.handlePressFollowing}
+                    >
                       <Row>
                         <Text>Following</Text>
                       </Row>
@@ -148,11 +173,13 @@ class Profile extends PureComponent<Props> {
               iconName="star"
               labelName="Starred Repositories"
               text={viewer.starredRepositories.totalCount}
+              onPress={this.handlePressStarRepo}
             />
             <ListRow
               iconName="device-hub"
               labelName="Owned Repositories"
               text={viewer.repositories.totalCount}
+              onPress={this.handlePressOwnRepo}
             />
           </List>
         </Content>

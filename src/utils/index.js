@@ -6,4 +6,5 @@ import { Linking } from 'react-native';
  * @param  {String} link   the link itself
  * @return {function}        [description]
  */
-export const openURL = url => () => Linking.openURL(url).catch(error => error);
+export const openURL = url => () =>
+  Linking.openURL(url).catch(error => console.log(error));
