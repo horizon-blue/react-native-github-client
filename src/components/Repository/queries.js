@@ -1,7 +1,6 @@
 import { gql } from 'apollo-boost';
 
 const REPO_INFO = `
-totalCount
 edges {
   node {
     id
@@ -38,7 +37,6 @@ export const STARRED_REPOSITORIES = gql`
     viewer {
       id
       starredRepositories(last: 10, before: $before) {
-        totalCount
         ${REPO_INFO}
       }
     }

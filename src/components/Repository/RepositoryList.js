@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-// import {FlatList} from 'react-native';
-import { Container, Content, Text, Button } from 'native-base';
+import { FlatList } from 'react-native';
+import { Container, Text, List, ListItem } from 'native-base';
 import { graphql } from 'react-apollo';
 import _ from 'lodash/fp';
 
@@ -24,12 +24,12 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
   const repo = ownProps.isStarredPage ? starredRepositories : repositories;
 
   return {
-    repositories: repo,
+    repositories: _.reverse(repo.edges),
     fetchMore: () =>
       fetchMore({
         variables: { before: _.first(repo.edges).cursor },
         updateQuery: (previousResult, { fetchMoreResult }) =>
-          deepMerge(previousResult, fetchMoreResult),
+          deepMerge(fetchMoreResult, previousResult),
       }),
     ...rest,
   };
@@ -44,16 +44,26 @@ const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
   props: transformProps,
 })
 class RepositoryList extends PureComponent<Props> {
+  renderRepo = ({ item }) => (
+    <ListItem>
+      <Text>{JSON.stringify(item, null, 4)}</Text>
+    </ListItem>
+  );
+
+  repoKeyExtractor = repo => repo.node.id;
+
   render = () => {
     console.log(this.props.repositories);
     return (
       <Container>
-        <Content>
-          <Text>{JSON.stringify(this.props.repositories, null, 4)}</Text>
-          <Button onPress={this.props.fetchMore}>
-            <Text>Fecth More</Text>
-          </Button>
-        </Content>
+        <List>
+          <FlatList
+            data={this.props.repositories}
+            renderItem={this.renderRepo}
+            keyExtractor={this.repoKeyExtractor}
+            onEndReached={this.props.fetchMore}
+          />
+        </List>
       </Container>
     );
   };
