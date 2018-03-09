@@ -4,6 +4,7 @@ const REPO_INFO = `
 edges {
   node {
     id
+    nameWithOwner
     name
     description
     viewerHasStarred
