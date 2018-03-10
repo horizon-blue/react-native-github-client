@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Container, Content, H1, View } from 'native-base';
-// types
+import { Content, H1, View } from 'native-base';
 import type { Node } from 'react';
+import Container from '../SafeContainer';
 
 export default (): Node => (
   <Container>

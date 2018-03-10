@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
-import { Container, Text, List, ListItem, Grid, Row, View } from 'native-base';
+import { Text, List, ListItem, Grid, Row, View } from 'native-base';
 import Octicons from 'react-native-vector-icons/Octicons';
+import Container from '../SafeContainer';
 
 import { getQuery } from './queries';
 import { warpQueries, openWebView } from 'Profile/src/utils';

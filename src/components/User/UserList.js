@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import {
-  Container,
   ListItem,
   List,
   Text,
@@ -10,9 +9,8 @@ import {
   Right,
   Thumbnail,
   Row,
-  Col,
 } from 'native-base';
-
+import Container from '../SafeContainer';
 import { getQuery } from './queries';
 import { warpQueries } from 'Profile/src/utils';
 

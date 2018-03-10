@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
-  Container,
   Content,
   Text,
   List,
@@ -18,7 +17,7 @@ import { graphql } from 'react-apollo';
 import moment from 'moment';
 // types
 import type { Node } from 'react';
-
+import Container from '../SafeContainer';
 import { openURL } from 'Profile/src/utils';
 import { getUserQuery } from './queries';
 import ListRow from './ListRow';
