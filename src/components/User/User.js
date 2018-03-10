@@ -14,13 +14,13 @@ import {
   Grid,
 } from 'native-base';
 import _ from 'lodash/fp';
-import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 import moment from 'moment';
 // types
 import type { Node } from 'react';
 
 import { openURL } from 'Profile/src/utils';
+import { getUserQuery } from './queries';
 import ListRow from './ListRow';
 
 // map graphql query item with iconname & labelname
@@ -46,34 +46,7 @@ type Props = {
   navigator: Object,
 };
 
-@graphql(gql`
-  query {
-    viewer {
-      id
-      login
-      email
-      bio
-      name
-      avatarUrl
-      websiteUrl
-      company
-      createdAt
-      location
-      followers {
-        totalCount
-      }
-      following {
-        totalCount
-      }
-      repositories(affiliations: OWNER) {
-        totalCount
-      }
-      starredRepositories {
-        totalCount
-      }
-    }
-  }
-`)
+@graphql(getUserQuery())
 class Profile extends PureComponent<Props> {
   renderProfileList = viewer =>
     _.flow(
@@ -96,14 +69,14 @@ class Profile extends PureComponent<Props> {
     this.props.navigator.push({
       screen: 'profile.user.list',
       title: 'Followers',
-      passProps: { repoType: 'followers' },
+      passProps: { userType: 'followers' },
     });
 
   handlePressFollowing = () =>
     this.props.navigator.push({
       screen: 'profile.user.list',
       title: 'Following',
-      passProps: { repoType: 'following' },
+      passProps: { userType: 'following' },
     });
 
   handlePressStarRepo = () =>

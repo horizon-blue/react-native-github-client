@@ -6,33 +6,17 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import _ from 'lodash/fp';
 
 import { getQuery } from './queries';
-import { deepMerge, openWebView } from 'Profile/src/utils';
+import { transformProps } from 'Profile/src/utils';
+import { openWebView } from 'Profile/src/utils';
 
-/**
- * A helper function that transform fetched result to props
- * @param  {Object} ownProps  properties directly passed to component
- * @param  {Object} data      data fetched or creatd by Apollo client
- * @return {Object}           the transformed object
- */
-const transformProps = ({ ownProps, data: { viewer, fetchMore, ...rest } }) => {
-  if (rest.loading || rest.error)
-    return {
-      data: rest,
-      fetchMore: () => {},
-    };
-
-  const repo = viewer[ownProps.repoType];
-
-  return {
-    repositories: _.reverse(repo.edges),
-    fetchMore: () =>
-      fetchMore({
-        variables: { before: _.first(repo.edges).cursor },
-        updateQuery: (previousResult, { fetchMoreResult }) =>
-          deepMerge(fetchMoreResult, previousResult),
-      }),
-    data: rest,
-  };
+type Props = {
+  data: {
+    loading: Boolean,
+  },
+  repositories: [Object],
+  fetchMore: null => null,
+  navigator: Object,
+  repoType: String,
 };
 
 class RepositoryList extends PureComponent<Props> {
@@ -91,31 +75,20 @@ class RepositoryList extends PureComponent<Props> {
     </View>
   );
 
-  render = () => {
-    return (
-      <Container>
-        <List>
-          <FlatList
-            data={this.props.repositories}
-            renderItem={this.renderRepo}
-            keyExtractor={this.repoKeyExtractor}
-            onEndReached={this.props.fetchMore}
-            onEndReachedThreshold={0.01}
-          />
-        </List>
-      </Container>
-    );
-  };
+  render = () => (
+    <Container>
+      <List>
+        <FlatList
+          data={this.props.repositories}
+          renderItem={this.renderRepo}
+          keyExtractor={this.repoKeyExtractor}
+          onEndReached={this.props.fetchMore}
+          onEndReachedThreshold={0.01}
+        />
+      </List>
+    </Container>
+  );
 }
-
-type Props = {
-  data: {
-    loading: Boolean,
-    viewer: Object,
-  },
-  navigator: Object,
-  repoType: String,
-};
 
 const styles = StyleSheet.create({
   privateRepo: {
@@ -132,7 +105,7 @@ const styles = StyleSheet.create({
 export default _.reduce((result, [field, rest]) =>
   graphql(getQuery(field, rest), {
     skip: props => props.repoType !== field,
-    props: transformProps,
+    props: transformProps('repoType', 'repositories'),
   })(result)
 )(RepositoryList)([
   ['repositories', 'affiliations: OWNER'],

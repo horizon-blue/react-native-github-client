@@ -35,3 +35,34 @@ export const deepMerge = (objA, objB) =>
     if (_.isObject(aVal) && _.isObject(bVal)) return deepMerge(aVal, bVal);
     return bVal;
   })(objA)(objB);
+
+/**
+ * A helper function that generate a function to transform fetched result
+ * to props
+ * @param  {String} propName    the prop name to transformed
+ * @param  {String} ownPropName the prop to
+ * @return {function}           a function that transformed
+ */
+export const transformProps = (ownPropName, propName) => ({
+  ownProps,
+  data: { viewer, fetchMore, ...rest },
+}) => {
+  if (rest.loading || rest.error)
+    return {
+      data: rest,
+      fetchMore: () => {},
+    };
+
+  const props = viewer[ownProps[ownPropName]];
+
+  return {
+    [propName]: _.reverse(props.edges),
+    fetchMore: () =>
+      fetchMore({
+        variables: { before: _.first(props.edges).cursor },
+        updateQuery: (previousResult, { fetchMoreResult }) =>
+          deepMerge(fetchMoreResult, previousResult),
+      }),
+    data: rest,
+  };
+};
