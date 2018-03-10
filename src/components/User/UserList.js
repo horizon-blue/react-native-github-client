@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
 });
 
 // Compose queires
-export default warpQueries('userType', 'users', getQuery)(UserList)([
+export default warpQueries(getQuery, 'userType', 'users')(UserList)([
   'followers',
   'following',
 ]);

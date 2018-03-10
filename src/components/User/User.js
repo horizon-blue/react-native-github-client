@@ -184,4 +184,4 @@ const styles = StyleSheet.create({
 });
 
 // Compose queires
-export default warpQueries(null, null, getUserQuery)(User)([null]);
+export default warpQueries(getUserQuery)(User)([null]);

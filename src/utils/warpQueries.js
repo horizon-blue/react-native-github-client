@@ -1,7 +1,7 @@
 import { graphql } from 'react-apollo';
 import _ from 'lodash/fp';
 
-import { deepMerge } from '.';
+import { deepMerge } from 'utils';
 
 /**
  * A helper function that generate a function to transform fetched result
@@ -51,13 +51,13 @@ const transformProps = (ownPropName, propName, isViewer) => ({
  * match the selected result to props[propName]. The returned function, when
  * evaluate on a component, should return a function that takes a list of
  * arguments to be passed in to queryGetter for each query
+ * @param  {function} queryGetter the function that should return a graphql
  * @param  {String} ownPropName the prop name to transformed
  * @param  {String} propName    the prop to receive data
- * @param  {function} queryGetter the function that should return a graphql
  *                              query when evaluated
  * @return {function}           a function in arity of two
  */
-export default (ownPropName, propName, queryGetter) =>
+export default (queryGetter, ownPropName, propName) =>
   _.reduce((result, args) => {
     const [field, rest] = _.isArray(args) ? args : [args, null];
     return graphql(queryGetter(field, rest, false), {

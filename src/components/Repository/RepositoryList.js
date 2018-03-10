@@ -101,6 +101,6 @@ const styles = StyleSheet.create({
 });
 
 // Compose queires
-export default warpQueries('repoType', 'repositories', getQuery)(
+export default warpQueries(getQuery, 'repoType', 'repositories')(
   RepositoryList
 )([['repositories', 'affiliations: OWNER'], 'starredRepositories', 'watching']);
