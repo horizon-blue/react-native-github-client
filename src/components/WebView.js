@@ -1,4 +1,5 @@
 import React from 'react';
 import { WebView } from 'react-native';
+import type { Node } from 'react';
 
-export default props => <WebView source={{ uri: props.uri }} />;
+export default ({ uri }: { uri: String }): Node => <WebView source={{ uri }} />;

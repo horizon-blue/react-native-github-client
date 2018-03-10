@@ -10,9 +10,9 @@ import {
   Thumbnail,
   Row,
 } from 'native-base';
-import Container from '../SafeContainer';
+import Container from 'components/SafeContainer';
 import { getQuery } from './queries';
-import { warpQueries } from 'Profile/src/utils';
+import { warpQueries } from 'utils';
 
 type Props = {
   data: {

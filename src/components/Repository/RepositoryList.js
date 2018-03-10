@@ -5,7 +5,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Container from '../SafeContainer';
 
 import { getQuery } from './queries';
-import { warpQueries, openWebView } from 'Profile/src/utils';
+import { warpQueries, openWebView } from 'utils';
 
 type Props = {
   data: {

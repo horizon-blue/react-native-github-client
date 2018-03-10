@@ -1,6 +1,17 @@
 {
   "presets": ["react-native", "flow"],
-  "plugins": ["transform-decorators-legacy"],
+  "plugins": [
+    "transform-decorators-legacy",
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "alias": {
+          "utils": "./src/utils"
+        }
+      }
+    ]
+  ],
   "env": {
     "production": {
       "plugins": ["transform-remove-console"]
