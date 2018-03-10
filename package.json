@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "apollo-boost": "^0.1.2",
+    "babel-plugin-transform-remove-console": "^6.9.0",
     "eslint-plugin-react-native": "^3.2.1",
     "graphql": "^0.13.1",
     "lodash": "^4.17.5",
