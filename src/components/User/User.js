@@ -16,7 +16,7 @@ import _ from 'lodash/fp';
 import moment from 'moment';
 // types
 import type { Node } from 'react';
-import Container from 'components/SafeContainer';
+import Container from 'SafeContainer';
 import { openURL, warpQueries } from 'utils';
 import { getUserQuery } from './queries';
 import ListRow from './ListRow';
