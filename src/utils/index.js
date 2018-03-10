@@ -68,7 +68,10 @@ export const transformProps = (ownPropName, propName, isViewer) => ({
     [propName]: _.reverse(props.edges),
     fetchMore: () =>
       fetchMore({
-        variables: { before: _.first(props.edges).cursor, login: props.login },
+        variables: {
+          before: _.first(props.edges).cursor,
+          login: ownProps.login,
+        },
         updateQuery: (previousResult, { fetchMoreResult }) =>
           deepMerge(fetchMoreResult, previousResult),
       }),
@@ -93,13 +96,13 @@ export const warpQueries = (ownPropName, propName, queryGetter) =>
     const [field, rest] = _.isArray(args) ? args : [args, null];
     return graphql(queryGetter(field, rest, false), {
       skip: props =>
-        (!ownPropName || props[ownPropName] !== field) && !props.login,
+        (ownPropName && props[ownPropName] !== field) || !props.login,
       options: ({ login }) => ({ variables: { login } }),
       props: transformProps(ownPropName, propName, false),
     })(
       graphql(queryGetter(field, rest, true), {
         skip: props =>
-          (!ownPropName || props[ownPropName] !== field) && props.login,
+          (ownPropName && props[ownPropName] !== field) || props.login,
         props: transformProps(ownPropName, propName, true),
       })(result)
     );
