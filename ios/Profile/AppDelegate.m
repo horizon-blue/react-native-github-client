@@ -20,6 +20,7 @@
 #import "RCCManager.h"
 #import <React/RCTRootView.h>
 
+#import "SplashScreen.h"
 
 @implementation AppDelegate
 
@@ -54,7 +55,7 @@
    [self.window makeKeyAndVisible];
    */
   
-  
+  [SplashScreen show];
   return YES;
 }
 

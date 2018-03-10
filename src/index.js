@@ -2,6 +2,8 @@ import { Navigation } from 'react-native-navigation';
 import { AsyncStorage } from 'react-native';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
+import SplashScreen from 'react-native-splash-screen';
+
 import registerScreens from './screens';
 // Due to security reason, I cannot include this file in version control
 // Please follow this link if you want to generate your own personal token:
@@ -50,4 +52,5 @@ const run = icons => {
 
 loadIcons(['user', 'globe'])
   .then(run)
+  .then(() => SplashScreen.hide())
   .catch(error => console.error(error));
