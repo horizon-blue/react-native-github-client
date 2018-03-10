@@ -1,13 +1,10 @@
 import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Container, Text, List, ListItem, Grid, Row, View } from 'native-base';
-import { graphql } from 'react-apollo';
 import Octicons from 'react-native-vector-icons/Octicons';
-import _ from 'lodash/fp';
 
 import { getQuery } from './queries';
-import { transformProps } from 'Profile/src/utils';
-import { openWebView } from 'Profile/src/utils';
+import { warpQueries, openWebView } from 'Profile/src/utils';
 
 type Props = {
   data: {
@@ -102,13 +99,6 @@ const styles = StyleSheet.create({
 });
 
 // Compose queires
-export default _.reduce((result, [field, rest]) =>
-  graphql(getQuery(field, rest), {
-    skip: props => props.repoType !== field,
-    props: transformProps('repoType', 'repositories'),
-  })(result)
-)(RepositoryList)([
-  ['repositories', 'affiliations: OWNER'],
-  ['starredRepositories'],
-  ['watching'],
-]);
+export default warpQueries('repoType', 'repositories', getQuery)(
+  RepositoryList
+)([['repositories', 'affiliations: OWNER'], 'starredRepositories', 'watching']);

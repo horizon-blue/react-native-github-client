@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
 import { FlatList } from 'react-native';
 import { Container, ListItem, List, Text } from 'native-base';
-import { graphql } from 'react-apollo';
-import _ from 'lodash/fp';
 
 import { getQuery } from './queries';
-import { transformProps } from 'Profile/src/utils';
+import { warpQueries } from 'Profile/src/utils';
 
 type Props = {
   data: {
@@ -41,9 +39,7 @@ class UserList extends PureComponent<Props> {
 }
 
 // Compose queires
-export default _.reduce((result, [field, rest]) =>
-  graphql(getQuery(field, rest), {
-    skip: props => props.userType !== field,
-    props: transformProps('userType', 'users'),
-  })(result)
-)(UserList)([['followers'], ['following']]);
+export default warpQueries('userType', 'users', getQuery)(UserList)([
+  'followers',
+  'following',
+]);

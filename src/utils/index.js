@@ -1,4 +1,5 @@
 import { Linking } from 'react-native';
+import { graphql } from 'react-apollo';
 import _ from 'lodash/fp';
 
 /**
@@ -40,7 +41,7 @@ export const deepMerge = (objA, objB) =>
  * A helper function that generate a function to transform fetched result
  * to props
  * @param  {String} propName    the prop name to transformed
- * @param  {String} ownPropName the prop to
+ * @param  {String} ownPropName the prop to receive data
  * @return {function}           a function that transformed
  */
 export const transformProps = (ownPropName, propName) => ({
@@ -66,3 +67,24 @@ export const transformProps = (ownPropName, propName) => ({
     data: rest,
   };
 };
+
+/**
+ * A helper function that return a warpper function that can be applied to
+ * a component so that it select the query based on props[ownPropName] and
+ * match the selected result to props[propName]. The returned function, when
+ * evaluate on a component, should return a function that takes a list of
+ * arguments to be passed in to queryGetter for each query
+ * @param  {String} ownPropName the prop name to transformed
+ * @param  {String} propName    the prop to receive data
+ * @param  {function} queryGetter the function that should return a graphql
+ *                              query when evaluated
+ * @return {function}           a function in arity of two
+ */
+export const warpQueries = (ownPropName, propName, queryGetter) =>
+  _.reduce((result, args) => {
+    const [field, rest] = _.isArray(args) ? args : [args, null];
+    return graphql(queryGetter(field, rest), {
+      skip: props => props[ownPropName] !== field,
+      props: transformProps(ownPropName, propName),
+    })(result);
+  });
