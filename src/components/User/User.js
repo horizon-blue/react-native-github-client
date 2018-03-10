@@ -68,28 +68,28 @@ class User extends PureComponent<Props> {
     this.props.navigator.push({
       screen: 'profile.user.list',
       title: 'Followers',
-      passProps: { userType: 'followers' },
+      passProps: { userType: 'followers', login: this.props.login },
     });
 
   handlePressFollowing = () =>
     this.props.navigator.push({
       screen: 'profile.user.list',
       title: 'Following',
-      passProps: { userType: 'following' },
+      passProps: { userType: 'following', login: this.props.login },
     });
 
   handlePressStarRepo = () =>
     this.props.navigator.push({
       screen: 'profile.repository.list',
       title: 'Starred Repositories',
-      passProps: { repoType: 'starredRepositories' },
+      passProps: { repoType: 'starredRepositories', login: this.props.login },
     });
 
   handlePressOwnRepo = () =>
     this.props.navigator.push({
       screen: 'profile.repository.list',
       title: 'Owned Repositories',
-      passProps: { repoType: 'repositories' },
+      passProps: { repoType: 'repositories', login: this.props.login },
     });
 
   render = (): Node => {

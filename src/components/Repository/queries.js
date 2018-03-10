@@ -10,7 +10,7 @@ export const getQuery = (
   rest: ?String,
   isViewer: Boolean
 ) => gql`
-  query($before: String, ${isViewer ? '' : '$login: String'}) {
+  query($before: String, ${isViewer ? '' : '$login: String!'}) {
     ${isViewer ? 'viewer' : 'user(login: $login)'} {
       id
       ${field}(last: 10, before: $before, ${rest || ''}) {

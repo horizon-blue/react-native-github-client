@@ -25,10 +25,17 @@ type Props = {
 };
 
 class UserList extends PureComponent<Props> {
+  handleClickUser = (username: String) => () =>
+    this.props.navigator.push({
+      screen: 'profile.user',
+      title: username,
+      passProps: { login: username },
+    });
+
   userKeyExtractor = user => user.node.id;
 
   renderUser = ({ item: { node } }) => (
-    <ListItem avatar>
+    <ListItem avatar onPress={this.handleClickUser(node.login)}>
       <Left>
         <Thumbnail source={{ uri: node.avatarUrl }} style={styles.avatar} />
       </Left>

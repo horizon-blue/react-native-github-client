@@ -15,6 +15,7 @@ type Props = {
   fetchMore: null => null,
   navigator: Object,
   repoType: String,
+  login: ?String,
 };
 
 class RepositoryList extends PureComponent<Props> {
