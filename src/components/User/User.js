@@ -13,12 +13,11 @@ import {
   Grid,
 } from 'native-base';
 import _ from 'lodash/fp';
-import { graphql } from 'react-apollo';
 import moment from 'moment';
 // types
 import type { Node } from 'react';
 import Container from '../SafeContainer';
-import { openURL } from 'Profile/src/utils';
+import { openURL, warpQueries } from 'Profile/src/utils';
 import { getUserQuery } from './queries';
 import ListRow from './ListRow';
 
@@ -40,13 +39,14 @@ const profileMap = {
 type Props = {
   data: {
     loading: Boolean,
-    viewer: Object,
+    user: ?Object,
   },
   navigator: Object,
+  viewer: Object,
+  login: ?String,
 };
 
-@graphql(getUserQuery())
-class Profile extends PureComponent<Props> {
+class User extends PureComponent<Props> {
   renderProfileList = viewer =>
     _.flow(
       _.entries,
@@ -93,7 +93,8 @@ class Profile extends PureComponent<Props> {
     });
 
   render = (): Node => {
-    const { data: { loading, viewer, error } } = this.props;
+    const { data: { loading, error }, viewer } = this.props;
+    error && console.error(error);
     return loading ? (
       <Text>Loading</Text>
     ) : error ? (
@@ -182,4 +183,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+// Compose queires
+export default warpQueries(null, null, getUserQuery)(User)([null]);

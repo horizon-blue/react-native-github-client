@@ -5,9 +5,13 @@ import { gql } from 'apollo-boost';
  * @param  {String} rest  optional, additional arguments
  * @return {Object}       graphql query
  */
-export const getQuery = (field: String, rest: ?String) => gql`
-  query($before: String) {
-    viewer {
+export const getQuery = (
+  field: String,
+  rest: ?String,
+  isViewer: Boolean
+) => gql`
+  query($before: String, ${isViewer ? '' : '$login: String'}) {
+    ${isViewer ? 'viewer' : 'user(login: $login)'} {
       id
       ${field}(last: 10, before: $before, ${rest || ''}) {
         edges {

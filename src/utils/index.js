@@ -42,25 +42,33 @@ export const deepMerge = (objA, objB) =>
  * to props
  * @param  {String} propName    the prop name to transformed
  * @param  {String} ownPropName the prop to receive data
+ * @param  {Boolean} isViewer    whether the current query is for viewer
  * @return {function}           a function that transformed
  */
-export const transformProps = (ownPropName, propName) => ({
+export const transformProps = (ownPropName, propName, isViewer) => ({
   ownProps,
-  data: { viewer, fetchMore, ...rest },
+  data: { viewer, user, fetchMore, ...rest },
 }) => {
   if (rest.loading || rest.error)
     return {
       data: rest,
       fetchMore: () => {},
     };
+  const actor = isViewer ? viewer : user;
 
-  const props = viewer[ownProps[ownPropName]];
+  if (!ownPropName)
+    return {
+      data: rest,
+      viewer: actor,
+    };
+
+  const props = actor[ownProps[ownPropName]];
 
   return {
     [propName]: _.reverse(props.edges),
     fetchMore: () =>
       fetchMore({
-        variables: { before: _.first(props.edges).cursor },
+        variables: { before: _.first(props.edges).cursor, login: props.login },
         updateQuery: (previousResult, { fetchMoreResult }) =>
           deepMerge(fetchMoreResult, previousResult),
       }),
@@ -83,8 +91,16 @@ export const transformProps = (ownPropName, propName) => ({
 export const warpQueries = (ownPropName, propName, queryGetter) =>
   _.reduce((result, args) => {
     const [field, rest] = _.isArray(args) ? args : [args, null];
-    return graphql(queryGetter(field, rest), {
-      skip: props => props[ownPropName] !== field,
-      props: transformProps(ownPropName, propName),
-    })(result);
+    return graphql(queryGetter(field, rest, false), {
+      skip: props =>
+        (!ownPropName || props[ownPropName] !== field) && !props.login,
+      options: ({ login }) => ({ variables: { login } }),
+      props: transformProps(ownPropName, propName, false),
+    })(
+      graphql(queryGetter(field, rest, true), {
+        skip: props =>
+          (!ownPropName || props[ownPropName] !== field) && props.login,
+        props: transformProps(ownPropName, propName, true),
+      })(result)
+    );
   });
