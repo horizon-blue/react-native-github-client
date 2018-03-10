@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   listItem: { paddingRight: 10 },
   repoName: { fontWeight: 'bold', marginLeft: 5 },
-  description: { marginTop: 10, marginBottom: 10 },
+  description: { marginVertical: 10 },
   bottomTag: { flexDirection: 'row' },
   bottomTagText: { fontSize: 14, marginRight: 10, marginLeft: 3 },
 });

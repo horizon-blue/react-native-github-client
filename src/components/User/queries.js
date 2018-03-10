@@ -1,6 +1,4 @@
 import { gql } from 'apollo-boost';
-import { deepMerge } from 'Profile/src/utils';
-import _ from 'lodash/fp';
 
 /**
  * Return the graphql query for given fields

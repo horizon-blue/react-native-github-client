@@ -1,6 +1,17 @@
 import React, { PureComponent } from 'react';
-import { FlatList } from 'react-native';
-import { Container, ListItem, List, Text } from 'native-base';
+import { FlatList, StyleSheet } from 'react-native';
+import {
+  Container,
+  ListItem,
+  List,
+  Text,
+  Left,
+  Body,
+  Right,
+  Thumbnail,
+  Row,
+  Col,
+} from 'native-base';
 
 import { getQuery } from './queries';
 import { warpQueries } from 'Profile/src/utils';
@@ -19,8 +30,20 @@ class UserList extends PureComponent<Props> {
   userKeyExtractor = user => user.node.id;
 
   renderUser = ({ item: { node } }) => (
-    <ListItem>
-      <Text>{JSON.stringify(node, null, 4)}</Text>
+    <ListItem avatar>
+      <Left>
+        <Thumbnail source={{ uri: node.avatarUrl }} style={styles.avatar} />
+      </Left>
+      <Body>
+        <Row>
+          {!!node.name && <Text style={styles.nameText}>{node.name}</Text>}
+          <Text style={styles.usernameText}>{node.login}</Text>
+        </Row>
+        <Text note numberOfLines={2} style={styles.bioText}>
+          {node.bio}
+        </Text>
+      </Body>
+      <Right />
     </ListItem>
   );
   render = () => (
@@ -37,6 +60,21 @@ class UserList extends PureComponent<Props> {
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  bioText: {
+    marginTop: 3,
+  },
+  avatar: {
+    margin: 5,
+  },
+  nameText: {
+    marginRight: 10,
+  },
+  usernameText: {
+    color: 'gray',
+  },
+});
 
 // Compose queires
 export default warpQueries('userType', 'users', getQuery)(UserList)([
