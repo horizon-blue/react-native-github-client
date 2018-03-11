@@ -9,8 +9,7 @@ import registerScreens from './screens';
 // Please follow this link if you want to generate your own personal token:
 // https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
 import { GITHUB_TOKEN } from './config';
-import loadIcons from './utils/loadIcons';
-import disableWarning from './utils/disableWarning';
+import { loadIcons, disableWarning } from 'utils';
 
 disableWarning();
 
