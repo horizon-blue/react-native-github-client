@@ -1,22 +1,43 @@
-import React from 'react';
-import { WebView } from 'react-native';
+import React, { PureComponent } from 'react';
+import { WebView as RNWebView } from 'react-native';
 import type { Node } from 'react';
+
+import { openURL } from 'utils';
 
 type Props = {
   uri: String,
   navigator: Object,
 };
 
-export default ({ uri, navigator }: Props): Node => {
-  navigator.setButtons({
-    rightButtons: [
-      {
-        component: 'BrowserButton', // This line loads our component as a nav bar button item
-        id: 'openBrowswer',
-        passProps: { uri },
-      },
-    ],
-  });
+class WebView extends PureComponent<Props> {
+  handlePageChange = ({ url }) => {
+    if (/^https:\/\//i.test(url)) {
+      this.props.navigator.setButtons({
+        rightButtons: [
+          {
+            component: 'BrowserButton', // This line loads our component as a nav bar button item
+            id: 'openBrowswer',
+            passProps: { uri: url },
+          },
+        ],
+      });
+      return true;
+    } else {
+      openURL(url)();
+      return false;
+    }
+  };
 
-  return <WebView source={{ uri }} />;
-};
+  render = (): Node => {
+    const { uri } = this.props;
+
+    return (
+      <RNWebView
+        source={{ uri }}
+        onShouldStartLoadWithRequest={this.handlePageChange}
+      />
+    );
+  };
+}
+
+export default WebView;
