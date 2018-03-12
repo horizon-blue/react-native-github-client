@@ -10,6 +10,10 @@ type Props = {
 };
 
 class WebView extends PureComponent<Props> {
+  static navigatorStyle = {
+    tabBarHidden: true,
+  };
+
   handlePageChange = ({ url }) => {
     if (/^https:\/\//i.test(url)) {
       this.props.navigator.setButtons({
