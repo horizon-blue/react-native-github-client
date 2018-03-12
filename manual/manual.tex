@@ -1,0 +1,127 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{hyperref}
+\graphicspath{ {img/} }
+
+\title{GitHub Client Testing Manual}
+\author{Xiaoyan Wang (xiaoyan5@illinois.edu)}
+
+\newcommand{\img}[3]{
+\begin{figure}
+\begin{center}
+\includegraphics[scale=#1]{#2}
+\caption{#3}\label{#2}
+\end{center}
+\end{figure}
+}
+
+\newcommand{\imgh}[4]{
+    \begin{figure}[!htbp]%
+    \begin{center}
+    \subfloat{{\includegraphics[scale=#1]{#2} }}%
+    \qquad
+    \subfloat{{\includegraphics[scale=#1]{#3} }}%
+    \caption{#4}\label{#2}
+    \end{center}
+\end{figure}
+}
+
+\newcommand{\B}[1]{\textbf{#1}}
+
+\usepackage{titlesec}
+
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\newcommand{\sectionbreak}{\clearpage}
+
+
+\section{Splash Screens}
+
+\imgh{0.45}{splash_screen}{splash_screen_iphoneX}{Splash Screen}
+
+The first thing the user should see when open the splash screen, which should persists until the app is finished loading. As in Figure~\ref{splash_screen} (and in the rest of the manual), the images are rendered using iPhone 6 simulator and iPhone X simulator, respectively.
+
+\section{Initial Screens}
+
+After loading, you should be able to see the initial screen with two tabs. The first tab is the explore page, which have not been implemented yet. The second is the user page, which displays the information of the current viewer (Figure~\ref{initial_explore}).
+
+\imgh{0.45}{initial_explore}{initial_user}{Initial User Screen (iPhone 6)}
+
+\section{User Page}
+
+The order of information displayed on user page, from top to bottom, should includes: avatar (image), name of user, biography, followers count and following count (in a same row), username, email, company, location, website, account created date, starred repositories count, owned repositories count, as shown in Figure~\ref{user_bottom}. If any of the information is missing for the given user, then the specific row will be removed from the view.
+
+The email row and the website row should be pressable, such that, when the viewer press down the row, the app will open the website in external browser. and open the email in system's email app (not available on simulator).
+
+\imgh{0.45}{user_bottom}{initial_user_iphoneX}{Information displayed on user page}
+
+The user page should looks similar in landscape mode, except that it has additional margins on both side in iPhone X so that the contents will not be covered, as in Figure~\ref{landscape_user} and \ref{landscape_user_iphoneX}.
+
+\imgh{0.45}{landscape_user}{landscape_user_bottom}{Profile Page Landscape Mode (iPhone 6)}
+
+\imgh{0.45}{landscape_user_iphoneX}{landscape_user_right}{Profile Page Landscape Mode (iPhone X)}
+
+\section{User List Pages}
+
+The user list page is used to display a list of users. Some of the usages include displaying a list of followers and displaying a list of following users.
+
+\subsection{Follower Page}
+
+The follower page should display the list of users that follow the current viewer. It should display the avatar, name, username, and biography for each of the account. The name or biography might be missing if the user does not have those information, as in Figure~\ref{follower}. The screen should display the first 10 users initially, and will fetch and display more users as the viewer reach the bottom of the page.
+
+\imgh{0.45}{follower}{follower_iphoneX}{Follower Page}
+
+The landscape mode should contain the same information as in the portrait mode, and should also have additional margin in iPhone X, as in Figure~\ref{landscape_follower} and \ref{landscape_follower_iphoneX}
+
+\img{0.45}{landscape_follower}{Follower Landscape Mode (iPhone 6)}
+
+\imgh{0.45}{landscape_follower_iphoneX}{landscape_follower_iphoneX_right}{Follower Landscape Mode (iPhone X)}
+
+\subsection{Following Page}
+
+The following page should looks almost identical to the follow page except for the title and the list of users, as in Figure~\ref{following}.
+
+\imgh{0.45}{following}{following_iphoneX}{Following Page}
+
+\subsection{Other User's Profile}
+
+The viewer can see details of the other user by pressing down the corresponding row in user list page. The app will push a new page, which is similar to the viewer's own profile page, except that it has a different title, and it displays the information on the other user, as in Figure~\ref{other_user}.
+
+\imgh{0.45}{other_user}{other_user2}{Other User's Profile}
+
+
+\section{Repository List Pages}
+
+The repository list page is used to display a list of repositories. Some of the usages include displaying a list of starred repositories and displaying a list of user's own repositories.
+
+\subsection{Starred Repositories}
+
+Each row in starred repositories page should include the name of the owner of the repository, the repository name, the description of the repository, the main language used by the repository (if any), starred count (if any), and the forked count (if any). It should fetch and display the first 10 repositories upon loading, and fetch more as viewer scroll down the screen.
+
+\imgh{0.45}{starred_repositories}{starred_repositories_iphoneX}{Starred Repositories}
+
+The information displayed in landscape mode should be the same as those displayed in the portrait mode, with extra margin for iPhone X, as shown in Figure~\ref{landscape_starred} and \ref{landscape_starred_iphoneX}
+
+\img{0.45}{landscape_starred}{Starred Repositories Landscape Mode (iPhone 6)}
+
+\imgh{0.45}{landscape_starred_iphoneX}{landscape_starred_iphoneX_right}{Starred Repositories Landscape Mode (iPhone X)}.
+
+\subsection{Owned Repositories}
+
+Owned repositories page should look almost identical to the starred repositories page, except that the title is different, the content belongs to the user, and it may contain private repositories - which are displayed with yellow background, as in Figure~\ref{owned_repositories}.
+
+\imgh{0.45}{owned_repositories}{owned_repositories_iphoneX}{Owned Repositories}
+
+\subsection{Web View}
+
+When user press the item in repository view, the app should open the corresponding page in a web view. The viewer still have the access to the navigation bar, which can be use to go back to the repository list page or open the web page in external browser, as shown in Figure~\ref{webview}. Due to security reason, the web view can only display web pages with SSL. URLs that starts with \texttt{http://} will be opened in external browser instead.
+
+\imgh{0.45}{webview}{webview_iphoneX}{Web View}
+
+\end{document}
