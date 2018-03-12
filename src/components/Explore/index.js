@@ -4,6 +4,9 @@ import { Content, H1, View } from 'native-base';
 import type { Node } from 'react';
 import Container from 'SafeContainer';
 
+/**
+ * A placeholder for the explore page
+ */
 export default (): Node => (
   <Container>
     <Content>

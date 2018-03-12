@@ -18,9 +18,24 @@ type Props = {
   login: ?String,
 };
 
+/**
+ * Display a List of Repositories
+ * @extends PureComponent
+ */
 class RepositoryList extends PureComponent<Props> {
+  /**
+   * Used in FlatList to make sure that each repo has a distinct key
+   * @param  {Object} repo  object containing information for each repo
+   * @return {String}      a unique key used to identify each row in list
+   */
   repoKeyExtractor = repo => repo.node.id;
 
+  /**
+   * Renders the user object into a row in the list
+   * @param  {Object} item the object containing information for each repository
+   * @return {Node}       a React Native Node that can be rendered into a row
+   *                      in the list
+   */
   renderRepo = ({ item: { node } }) => (
     <View style={node.isPrivate ? styles.privateRepo : null}>
       <ListItem

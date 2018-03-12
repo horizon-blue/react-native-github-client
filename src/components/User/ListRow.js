@@ -8,6 +8,15 @@ type Props = {
   iconName: String,
   labelName: String,
 };
+
+/**
+ * The component used to display the content of each row in user's profile page
+ * @param  {String} text      the main content to display
+ * @param  {String} iconName  the name of icon (should be one of the Octicons)
+ * @param  {String} labelName the text to be displayed for the label
+ * @param  {Object} props     other props that will be apply to the outer
+ *                            container
+ */
 export default ({ text, iconName, labelName, ...props }: Props) => (
   <ListItem icon {...props}>
     <Left>
@@ -22,6 +31,7 @@ export default ({ text, iconName, labelName, ...props }: Props) => (
   </ListItem>
 );
 
+// widht of the content should be adaptive
 const { width } = Dimensions.get('window');
 
 const styles: Object = StyleSheet.create({

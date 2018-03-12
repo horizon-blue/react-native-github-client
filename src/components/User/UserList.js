@@ -24,7 +24,16 @@ type Props = {
   userType: String,
 };
 
+/**
+ * Display a List of Users
+ * @extends PureComponent
+ */
 class UserList extends PureComponent<Props> {
+  /**
+   * Open the User page to display information related to the specific user when
+   * it is being pressed
+   * @param  {String} username  "login" data for the user
+   */
   handleClickUser = (username: String) => () =>
     this.props.navigator.push({
       screen: 'profile.user',
@@ -32,8 +41,19 @@ class UserList extends PureComponent<Props> {
       passProps: { login: username },
     });
 
+  /**
+   * Used in FlatList to make sure that each user has a distinct key
+   * @param  {Object} user  object containing information for each user
+   * @return {String}      a unique key used to identify each row in list
+   */
   userKeyExtractor = user => user.node.id;
 
+  /**
+   * Renders the user object into a row in the list
+   * @param  {Object} item the object containing information for each user
+   * @return {Node}       a React Native Node that can be rendered into a row
+   *                      in the list
+   */
   renderUser = ({ item: { node } }) => (
     <ListItem avatar onPress={this.handleClickUser(node.login)}>
       <Left>
@@ -51,6 +71,7 @@ class UserList extends PureComponent<Props> {
       <Right />
     </ListItem>
   );
+
   render = () => (
     <Container>
       <List>

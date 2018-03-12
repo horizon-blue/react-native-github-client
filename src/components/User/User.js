@@ -46,7 +46,18 @@ type Props = {
   login: ?String,
 };
 
+/**
+ * The User Profile page
+ * @extends PureComponent
+ */
 class User extends PureComponent<Props> {
+  /**
+   * the function map the list of information avaliable for the user to
+   * a list of React component. If any of the information is missing, it
+   * returns null for the specific item
+   * @param  {Object} viewer the object containing information on the viewer
+   * @return {[Node]}        an array of React Native Nodes
+   */
   renderProfileList = viewer =>
     _.flow(
       _.entries,
@@ -64,6 +75,10 @@ class User extends PureComponent<Props> {
       )
     )(profileMap);
 
+  /**
+   * Navigate to the UserList page that displays a list of users that follow the
+   * current user
+   */
   handlePressFollower = () =>
     this.props.navigator.push({
       screen: 'profile.user.list',
@@ -71,6 +86,10 @@ class User extends PureComponent<Props> {
       passProps: { userType: 'followers', login: this.props.login },
     });
 
+  /**
+   * Navigate to the UserList page that displays a list of users that current
+   * user follows
+   */
   handlePressFollowing = () =>
     this.props.navigator.push({
       screen: 'profile.user.list',
@@ -78,6 +97,10 @@ class User extends PureComponent<Props> {
       passProps: { userType: 'following', login: this.props.login },
     });
 
+  /**
+   * Navigate to the RepoList page that displays a list of repositories that
+   * the current user stars
+   */
   handlePressStarRepo = () =>
     this.props.navigator.push({
       screen: 'profile.repository.list',
@@ -85,6 +108,10 @@ class User extends PureComponent<Props> {
       passProps: { repoType: 'starredRepositories', login: this.props.login },
     });
 
+  /**
+   * Navigate to the RepoList page that displays a list of repositories that
+   * the current user creates and owned
+   */
   handlePressOwnRepo = () =>
     this.props.navigator.push({
       screen: 'profile.repository.list',
@@ -94,7 +121,11 @@ class User extends PureComponent<Props> {
 
   render = (): Node => {
     const { data: { loading, error }, viewer } = this.props;
+
+    // log the error, if any
     error && console.error(error);
+
+    // render the main content if and only if the data were successfully loaded
     return loading ? (
       <Text>Loading</Text>
     ) : error ? (
