@@ -5,12 +5,6 @@ import { ApolloProvider } from 'react-apollo';
 import SplashScreen from 'react-native-splash-screen';
 
 import registerScreens from './screens';
-/*
-Due to security reason, I cannot include this file in version control
-Please follow this link if you want to generate your own personal token:
-https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
- */
-import { GITHUB_TOKEN } from './config';
 import { loadIcons, disableWarning } from 'utils';
 
 disableWarning();
@@ -27,7 +21,7 @@ const client = new ApolloClient({
     const token = await AsyncStorage.getItem('token');
     operation.setContext({
       headers: {
-        authorization: `Bearer ${token || GITHUB_TOKEN}`,
+        authorization: `Bearer ${token}`,
       },
     });
   },
