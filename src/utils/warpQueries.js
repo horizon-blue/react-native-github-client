@@ -32,15 +32,21 @@ const transformProps = (ownPropName, propName, isViewer) => ({
 
   return {
     [propName]: _.reverse(props.edges),
-    fetchMore: () =>
+    fetchMore: component => () => {
+      // prevent repeatively fetching the same content
+      if (component.isFetchingMore) return;
+      component.isFetchingMore = true;
       fetchMore({
         variables: {
           before: _.first(props.edges).cursor,
           login: ownProps.login,
         },
-        updateQuery: (previousResult, { fetchMoreResult }) =>
-          deepMerge(fetchMoreResult, previousResult),
-      }),
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          component.isFetchingMore = false;
+          return deepMerge(fetchMoreResult, previousResult);
+        },
+      });
+    },
     data: rest,
   };
 };

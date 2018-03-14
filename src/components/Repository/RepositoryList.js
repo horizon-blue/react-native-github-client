@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Text, List, ListItem, Grid, Row, View } from 'native-base';
 import Octicons from 'react-native-vector-icons/Octicons';
+import type { Node } from 'react';
+
 import Container from 'SafeContainer';
 
 import { getQuery } from './queries';
@@ -12,7 +14,7 @@ type Props = {
     loading: Boolean,
   },
   repositories: [Object],
-  fetchMore: null => null,
+  fetchMore: Node => null,
   navigator: Object,
   repoType: String,
   login: ?String,
@@ -96,8 +98,7 @@ class RepositoryList extends PureComponent<Props> {
           data={this.props.repositories}
           renderItem={this.renderRepo}
           keyExtractor={this.repoKeyExtractor}
-          onEndReached={this.props.fetchMore}
-          onEndReachedThreshold={0.01}
+          onEndReached={this.props.fetchMore(this)}
         />
       </List>
     </Container>

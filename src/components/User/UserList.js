@@ -10,6 +10,7 @@ import {
   Thumbnail,
   Row,
 } from 'native-base';
+import type { Node } from 'react';
 import Container from 'SafeContainer';
 import { getQuery } from './queries';
 import { warpQueries } from 'utils';
@@ -19,7 +20,7 @@ type Props = {
     loading: Boolean,
   },
   users: [Object],
-  fetchMore: null => null,
+  fetchMore: Node => null,
   navigator: Object,
   userType: String,
 };
@@ -79,8 +80,7 @@ class UserList extends PureComponent<Props> {
           data={this.props.users}
           renderItem={this.renderUser}
           keyExtractor={this.userKeyExtractor}
-          onEndReached={this.props.fetchMore}
-          onEndReachedThreshold={0.01}
+          onEndReached={this.props.fetchMore(this)}
         />
       </List>
     </Container>
