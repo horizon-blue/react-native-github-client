@@ -66,8 +66,19 @@ const run = icons => {
   });
 };
 
+const login = async () => {
+  const token = await AsyncStorage.getItem('token');
+  if (!token) {
+    Navigation.showModal({
+      screen: 'profile.user.login',
+      title: 'Login',
+    });
+  }
+};
+
 // load the icons and start the main app
 loadIcons(['user', 'globe'])
   .then(run)
+  .then(login)
   .then(() => SplashScreen.hide())
   .catch(error => console.error(error));
