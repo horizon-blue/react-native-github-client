@@ -33,7 +33,13 @@ const profileMap = {
     url => url.replace(/^http(s?):\/\/|\/$/gi, ''),
     openURL,
   ],
-  createdAt: ['calendar', 'Joined', date => moment(date).format('LL')],
+  createdAt: [
+    'calendar',
+    'Joined',
+    date => moment(date).format('LL'),
+    null,
+    { last: true },
+  ],
 };
 
 type Props = {
@@ -62,7 +68,7 @@ class User extends PureComponent<Props> {
     _.flow(
       _.entries,
       _.map(
-        ([queryItem, [iconName, labelName, callback, onPressFunc]]) =>
+        ([queryItem, [iconName, labelName, callback, onPressFunc, props]]) =>
           viewer[queryItem] ? (
             <ListRow
               key={queryItem}
@@ -70,6 +76,7 @@ class User extends PureComponent<Props> {
               iconName={iconName}
               labelName={labelName}
               onPress={onPressFunc ? onPressFunc(viewer[queryItem]) : null}
+              {...props}
             />
           ) : null
       )
@@ -145,7 +152,7 @@ class User extends PureComponent<Props> {
                 <Text style={styles.bio}>{viewer.bio}</Text>
               </Body>
             </ListItem>
-            <ListItem>
+            <ListItem last>
               <Body style={{ flex: 3 }}>
                 <Grid>
                   <Col>
@@ -192,6 +199,7 @@ class User extends PureComponent<Props> {
               labelName="Owned Repositories"
               text={viewer.repositories.totalCount}
               onPress={this.handlePressOwnRepo}
+              last={true}
             />
           </List>
         </Content>

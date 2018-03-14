@@ -36,13 +36,15 @@ const client = new ApolloClient({
 // Register all screens using react-native-navigation
 registerScreens(client.store, ApolloProvider, client);
 
+let icons = {};
+
 /**
  * A function, when execute, start the main app with two tabs
  * @param  {Object} icons  key-values pair where each key corresponds to an
  *                         iocn name and each value corresponds to an image
  *                         resource
  */
-const run = icons => {
+const run = () => {
   Navigation.startTabBasedApp({
     tabs: [
       {
@@ -69,16 +71,20 @@ const run = icons => {
 const login = async () => {
   const token = await AsyncStorage.getItem('token');
   if (!token) {
-    Navigation.showModal({
-      screen: 'profile.user.login',
-      title: 'Login',
+    return new Promise(resolve => {
+      Navigation.showModal({
+        screen: 'profile.user.login',
+        title: 'Login',
+        passProps: { onSubmit: () => resolve() },
+      });
     });
   }
 };
 
 // load the icons and start the main app
 loadIcons(['user', 'globe'])
-  .then(run)
+  .then(resources => (icons = resources))
   .then(login)
+  .then(run)
   .then(() => SplashScreen.hide())
   .catch(error => console.error(error));
