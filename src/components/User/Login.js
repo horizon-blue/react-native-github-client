@@ -54,6 +54,7 @@ class Login extends PureComponent<Props> {
               getRef={password => (this.password = password)}
               value={this.state.password}
               onChangeText={this.handleChangePassword}
+              onSubmitEditing={this.handleSubmit}
             />
           </Item>
           <Button block onPress={this.handleSubmit} style={styles.button}>

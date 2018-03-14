@@ -30,8 +30,32 @@ const client = new ApolloClient({
 // Register all screens using react-native-navigation
 registerScreens(client.store, ApolloProvider, client);
 
-let icons = {};
+const login = async () => {
+  const token = await AsyncStorage.getItem('token');
+  if (!token) {
+    return new Promise(resolve => {
+      Navigation.showModal({
+        screen: 'profile.user.login',
+        title: 'Login',
+        passProps: {
+          onSubmit: token => {
+            Navigation.dismissModal();
+            resolve(AsyncStorage.setItem('token', token));
+          },
+        },
+      });
+    });
+  }
+};
 
+const logout = () => {
+  AsyncStorage.removeItem('token')
+    .then(login)
+    .then(run)
+    .catch(err => console.log(err));
+};
+
+let icons = {};
 /**
  * A function, when execute, start the main app with two tabs
  * @param  {Object} icons  key-values pair where each key corresponds to an
@@ -52,6 +76,9 @@ const run = () => {
         screen: 'profile.user',
         title: 'Profile',
         icon: icons.user,
+        passProps: {
+          logout,
+        },
       },
     ],
     tabsStyle: {
@@ -60,24 +87,6 @@ const run = () => {
       initialTabIndex: 1,
     },
   });
-};
-
-const login = async () => {
-  const token = await AsyncStorage.getItem('token');
-  if (!token) {
-    return new Promise(resolve => {
-      Navigation.showModal({
-        screen: 'profile.user.login',
-        title: 'Login',
-        passProps: {
-          onSubmit: token => {
-            Navigation.dismissModal();
-            resolve(AsyncStorage.setItem('token', token));
-          },
-        },
-      });
-    });
-  }
 };
 
 // load the icons and start the main app

@@ -11,6 +11,7 @@ import {
   Col,
   Row,
   Grid,
+  Button,
 } from 'native-base';
 import _ from 'lodash/fp';
 import moment from 'moment';
@@ -50,6 +51,7 @@ type Props = {
   navigator: Object,
   viewer: Object,
   login: ?String,
+  logout: null => null,
 };
 
 /**
@@ -201,6 +203,11 @@ class User extends PureComponent<Props> {
               onPress={this.handlePressOwnRepo}
               last={true}
             />
+            {!this.props.login && (
+              <Button full transparent danger onPress={this.props.logout}>
+                <Text>Logout</Text>
+              </Button>
+            )}
           </List>
         </Content>
       </Container>
