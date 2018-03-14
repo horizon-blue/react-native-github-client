@@ -75,7 +75,12 @@ const login = async () => {
       Navigation.showModal({
         screen: 'profile.user.login',
         title: 'Login',
-        passProps: { onSubmit: () => resolve() },
+        passProps: {
+          onSubmit: token => {
+            Navigation.dismissModal();
+            resolve(AsyncStorage.setItem('token', token));
+          },
+        },
       });
     });
   }
