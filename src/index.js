@@ -1,32 +1,13 @@
 import { Navigation } from 'react-native-navigation';
-import { AsyncStorage } from 'react-native';
-import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import SplashScreen from 'react-native-splash-screen';
 
 import registerScreens from './screens';
 import { loadIcons, disableWarning } from 'utils';
+import client from './client';
 import { login, logout } from './auth';
 
 disableWarning();
-
-/**
- * Initialize the Appolo client to connect to the graphql API at github
- * Try to get the token from AsyncStorage, and fall back to the GITHUB_TOKEN
- * stored in ./config.js if no token is found
- * @type {ApolloClient}
- */
-const client = new ApolloClient({
-  uri: 'https://api.github.com/graphql',
-  request: async operation => {
-    const token = await AsyncStorage.getItem('token');
-    operation.setContext({
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-  },
-});
 
 // Register all screens using react-native-navigation
 registerScreens(client.store, ApolloProvider, client);

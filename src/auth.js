@@ -1,5 +1,6 @@
 import { Navigation } from 'react-native-navigation';
 import { AsyncStorage } from 'react-native';
+import client from './client';
 
 export const login = async () => {
   const token = await AsyncStorage.getItem('token');
@@ -19,7 +20,9 @@ export const login = async () => {
   }
 };
 
-export const logout = () =>
+export const logout = () => {
   AsyncStorage.removeItem('token')
     .then(login)
+    .then(client.resetStore)
     .catch(err => console.log(err));
+};
