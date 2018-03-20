@@ -6,6 +6,7 @@ import SplashScreen from 'react-native-splash-screen';
 
 import registerScreens from './screens';
 import { loadIcons, disableWarning } from 'utils';
+import { login, logout } from './auth';
 
 disableWarning();
 
@@ -29,31 +30,6 @@ const client = new ApolloClient({
 
 // Register all screens using react-native-navigation
 registerScreens(client.store, ApolloProvider, client);
-
-const login = async () => {
-  const token = await AsyncStorage.getItem('token');
-  if (!token) {
-    return new Promise(resolve => {
-      Navigation.showModal({
-        screen: 'profile.user.login',
-        title: 'Login',
-        passProps: {
-          onSubmit: token => {
-            Navigation.dismissModal();
-            resolve(AsyncStorage.setItem('token', token));
-          },
-        },
-      });
-    });
-  }
-};
-
-const logout = () => {
-  AsyncStorage.removeItem('token')
-    .then(login)
-    .then(run)
-    .catch(err => console.log(err));
-};
 
 let icons = {};
 /**
