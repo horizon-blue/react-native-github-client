@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { Content, Form, Item, Input, Label, Button, Text } from 'native-base';
 import Container from 'SafeContainer';
 import { login } from 'utils';
@@ -66,11 +66,9 @@ class Login extends PureComponent<Props> {
   );
 }
 
-const { height } = Dimensions.get('window');
-
 const styles = StyleSheet.create({
   button: {
-    marginTop: height * 0.1,
+    marginTop: 30,
     marginHorizontal: 10,
   },
 });

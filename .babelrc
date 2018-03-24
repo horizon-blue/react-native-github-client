@@ -9,7 +9,8 @@
         "cwd": "babelrc",
         "alias": {
           "utils": "./src/utils",
-          "SafeContainer": "./src/components/SafeContainer"
+          "SafeContainer": "./src/components/SafeContainer",
+          "SwipeRow": "./src/components/SwipeRow"
         }
       }
     ]

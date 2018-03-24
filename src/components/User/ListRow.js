@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import React, { PureComponent } from 'react';
+import { Dimensions } from 'react-native';
 import { ListItem, Left, Body, Right, Text } from 'native-base';
 import Octicons from 'react-native-vector-icons/Octicons';
 
@@ -11,31 +11,35 @@ type Props = {
 
 /**
  * The component used to display the content of each row in user's profile page
- * @param  {String} text      the main content to display
- * @param  {String} iconName  the name of icon (should be one of the Octicons)
- * @param  {String} labelName the text to be displayed for the label
- * @param  {Object} props     other props that will be apply to the outer
- *                            container
  */
-export default ({ text, iconName, labelName, ...props }: Props) => (
-  <ListItem icon {...props}>
-    <Left>
-      <Octicons name={iconName} size={25} />
-    </Left>
-    <Body>
-      <Text>{labelName}</Text>
-    </Body>
-    <Right style={styles.listContent}>
-      <Text numberOfLines={1}>{text}</Text>
-    </Right>
-  </ListItem>
-);
+class ListRow extends PureComponent<Props> {
+  componentWillMount = () => {
+    Dimensions.addEventListener('change', this.handleUpdate);
+  };
 
-// widht of the content should be adaptive
-const { width } = Dimensions.get('window');
+  componentWillUnmount = () => {
+    Dimensions.removeEventListener('change', this.handleUpdate);
+  };
 
-const styles: Object = StyleSheet.create({
-  listContent: {
-    maxWidth: width * 0.6,
-  },
-});
+  handleUpdate = () => this.forceUpdate();
+
+  render = () => {
+    const { text, iconName, labelName, ...props } = this.props;
+    const { width } = Dimensions.get('window');
+    return (
+      <ListItem icon {...props}>
+        <Left>
+          <Octicons name={iconName} size={25} />
+        </Left>
+        <Body>
+          <Text>{labelName}</Text>
+        </Body>
+        <Right style={{ maxWidth: width * 0.6 }}>
+          <Text numberOfLines={1}>{text}</Text>
+        </Right>
+      </ListItem>
+    );
+  };
+}
+
+export default ListRow;

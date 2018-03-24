@@ -2,12 +2,15 @@ import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Text, List, ListItem, Grid, Row, View } from 'native-base';
 import Octicons from 'react-native-vector-icons/Octicons';
+import { graphql } from 'react-apollo';
 import type { Node } from 'react';
 
 import Container from 'SafeContainer';
 
 import { getQuery } from './queries';
+import { addStar } from './mutations';
 import { warpQueries, openWebView } from 'utils';
+import SwipeRow from 'SwipeRow';
 
 type Props = {
   data: {
@@ -40,54 +43,62 @@ class RepositoryList extends PureComponent<Props> {
    */
   renderRepo = ({ item: { node } }) => (
     <View style={node.isPrivate ? styles.privateRepo : null}>
-      <ListItem
-        onPress={openWebView(node.url, this.props.navigator)}
-        style={styles.listItem}
+      <SwipeRow
+        icon={
+          node.viewerHasStarred
+            ? { name: 'md-star-outline', text: 'Unstar', color: 'goldenrod' }
+            : { name: 'md-star', text: 'Star', color: 'steelblue' }
+        }
       >
-        <Grid>
-          <Row>
-            <Octicons name="repo" size={18} />
-            <Text style={styles.repoName} numberOfLines={1}>
-              {this.props.repoType === 'repositories'
-                ? node.name
-                : node.nameWithOwner}
-            </Text>
-          </Row>
-          <Row style={styles.description}>
-            <Text note numberOfLines={3}>
-              {node.description || 'No description'}
-            </Text>
-          </Row>
-          <Row>
-            {!!node.primaryLanguage && (
-              <View style={styles.bottomTag}>
-                <Octicons
-                  size={15}
-                  name="primitive-dot"
-                  color={node.primaryLanguage.color}
-                />
-                <Text style={styles.bottomTagText}>
-                  {node.primaryLanguage.name}
-                </Text>
-              </View>
-            )}
-            {!!node.stargazers.totalCount && (
-              <View style={styles.bottomTag}>
-                <Octicons size={15} name="star" />
-                <Text style={styles.bottomTagText}>
-                  {node.stargazers.totalCount}
-                </Text>
-              </View>
-            )}
-            {!!node.forkCount && (
-              <View style={styles.bottomTag}>
-                <Octicons size={15} name="repo-forked" />
-                <Text style={styles.bottomTagText}>{node.forkCount}</Text>
-              </View>
-            )}
-          </Row>
-        </Grid>
-      </ListItem>
+        <ListItem
+          onPress={openWebView(node.url, this.props.navigator)}
+          style={styles.listItem}
+        >
+          <Grid>
+            <Row>
+              <Octicons name="repo" size={18} />
+              <Text style={styles.repoName} numberOfLines={1}>
+                {this.props.repoType === 'repositories'
+                  ? node.name
+                  : node.nameWithOwner}
+              </Text>
+            </Row>
+            <Row style={styles.description}>
+              <Text note numberOfLines={3}>
+                {node.description || 'No description'}
+              </Text>
+            </Row>
+            <Row>
+              {!!node.primaryLanguage && (
+                <View style={styles.bottomTag}>
+                  <Octicons
+                    size={15}
+                    name="primitive-dot"
+                    color={node.primaryLanguage.color}
+                  />
+                  <Text style={styles.bottomTagText}>
+                    {node.primaryLanguage.name}
+                  </Text>
+                </View>
+              )}
+              {!!node.stargazers.totalCount && (
+                <View style={styles.bottomTag}>
+                  <Octicons size={15} name="star" />
+                  <Text style={styles.bottomTagText}>
+                    {node.stargazers.totalCount}
+                  </Text>
+                </View>
+              )}
+              {!!node.forkCount && (
+                <View style={styles.bottomTag}>
+                  <Octicons size={15} name="repo-forked" />
+                  <Text style={styles.bottomTagText}>{node.forkCount}</Text>
+                </View>
+              )}
+            </Row>
+          </Grid>
+        </ListItem>
+      </SwipeRow>
     </View>
   );
 
@@ -117,6 +128,10 @@ const styles = StyleSheet.create({
 });
 
 // Compose queires
-export default warpQueries(getQuery, 'repoType', 'repositories')(
-  RepositoryList
-)([['repositories', 'affiliations: OWNER'], 'starredRepositories', 'watching']);
+export default graphql(addStar)(
+  warpQueries(getQuery, 'repoType', 'repositories')(RepositoryList)([
+    ['repositories', 'affiliations: OWNER'],
+    'starredRepositories',
+    'watching',
+  ])
+);

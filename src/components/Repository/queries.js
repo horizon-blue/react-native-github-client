@@ -20,6 +20,7 @@ export const getQuery = (
             nameWithOwner
             name
             description
+            viewerHasStarred
             primaryLanguage {
               id
               color
