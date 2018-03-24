@@ -13,12 +13,13 @@ import { deepMerge } from 'utils';
  */
 const transformProps = (ownPropName, propName, isViewer) => ({
   ownProps,
-  data: { viewer, user, fetchMore, ...rest },
+  data: { viewer, user, fetchMore, refetch, ...rest },
 }) => {
   if (rest.loading || rest.error)
     return {
       data: rest,
       fetchMore: () => {},
+      refetch: () => {},
     };
   const actor = isViewer ? viewer : user;
 
@@ -46,6 +47,10 @@ const transformProps = (ownPropName, propName, isViewer) => ({
           return deepMerge(fetchMoreResult, previousResult);
         },
       });
+    },
+    refetch: component => () => {
+      component.setState({ refreshing: true });
+      refetch().then(() => component.setState({ refreshing: false }));
     },
     data: rest,
   };
