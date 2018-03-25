@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { List, Text, ListItem, Left, Body, Thumbnail } from 'native-base';
 import moment from 'moment';
 import Container from 'SafeContainer';
@@ -18,22 +18,39 @@ class Explorer extends PureComponent<Props> {
 
   state = {
     events: [],
+    refreshing: false,
   };
-  componentDidMount = () => this.fetchEvent();
+  componentDidMount = () => this.fetchEvent(false);
 
-  fetchEvent = () => {
-    if (this.loading) return;
+  handlePressUser = (login: String) => () =>
+    this.props.navigator.push({
+      screen: 'profile.user',
+      title: login,
+      passProps: { login },
+    });
+
+  handleRefresh = () => this.fetchEvent(true);
+  handleLoadMore = () => this.fetchEvent(false);
+
+  fetchEvent = (refresh = false) => {
+    if (this.loading || this.state.refreshing) return;
     this.loading = true;
 
-    getEvent(this.page)
+    const page = refresh ? 1 : this.page;
+    if (refresh) this.setState({ refreshing: true });
+
+    getEvent(page)
       .then(res => {
         this.loading = false;
-        this.page = this.page + 1;
-        this.setState({ events: this.state.events.concat(res.data) });
+        this.page = page + 1;
+        this.setState({
+          events: (refresh ? [] : this.state.events).concat(res.data),
+          refreshing: false,
+        });
       })
       .catch(err => {
         this.loading = false;
-        this.setState({ error: err.message });
+        this.setState({ error: err.message, refreshing: false });
       });
   };
 
@@ -50,11 +67,15 @@ class Explorer extends PureComponent<Props> {
             )}
           >
             <Left>
-              <Thumbnail
-                small
-                source={{ uri: item.actor.avatar_url }}
-                style={styles.avatar}
-              />
+              <TouchableOpacity
+                onPress={this.handlePressUser(item.actor.login)}
+              >
+                <Thumbnail
+                  small
+                  source={{ uri: item.actor.avatar_url }}
+                  style={styles.avatar}
+                />
+              </TouchableOpacity>
             </Left>
             <Body>
               <Text>
@@ -85,7 +106,9 @@ class Explorer extends PureComponent<Props> {
             data={this.state.events}
             keyExtractor={this.eventKeyExtractor}
             renderItem={this.renderEvent}
-            onEndReached={this.fetchEvent}
+            onEndReached={this.handleLoadMore}
+            onRefresh={this.handleRefresh}
+            refreshing={this.state.refreshing}
           />
         </List>
       </Container>
