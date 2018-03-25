@@ -71,7 +71,7 @@ class UserList extends PureComponent<Props> {
               text: 'Unfollow',
               color: 'firebrick',
             }
-          : { name: 'person-add', text: 'Follow', color: 'goldenrod' }
+          : { name: 'person-add', text: 'Follow', color: 'steelblue' }
       }
       onPressButton={(node.viewerIsFollowing ? unfollowUser : followUser)(
         node.login
