@@ -11,8 +11,8 @@ export const getEvent = (page = 1) =>
   );
 
 export const searchQuery = gql`
-  query($query: String!, $type: SearchType!, $before: String) {
-    search(query: $query, type: $type, last: 10, before: $before) {
+  query($query: String!, $type: SearchType!, $after: String) {
+    search(query: $query, type: $type, first: 10, after: $after) {
       edges {
         node {
           ...on Repository {
@@ -22,6 +22,7 @@ export const searchQuery = gql`
             ${userFields}
           }
         }
+        cursor
       }
     }
   }

@@ -12,6 +12,10 @@ type Props = {
 };
 
 class Search extends PureComponent<Props> {
+  static navigatorStyle = {
+    tabBarHidden: true,
+  };
+
   state = {};
   timer = null;
 
