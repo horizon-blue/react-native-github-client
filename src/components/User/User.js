@@ -18,7 +18,7 @@ import moment from 'moment';
 // types
 import type { Node } from 'react';
 import Container from 'SafeContainer';
-import { openURL, warpQueries } from 'utils';
+import { openURL, warpQueries, openWebView } from 'utils';
 import { getUserQuery } from './queries';
 import { followUser, unfollowUser } from './mutations';
 import ListRow from './ListRow';
@@ -33,7 +33,7 @@ const profileMap = {
     'link',
     'Website',
     url => url.replace(/^http(s?):\/\/|\/$/gi, ''),
-    openURL,
+    openWebView,
   ],
   createdAt: [
     'calendar',

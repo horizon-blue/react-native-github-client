@@ -1,4 +1,5 @@
 import { Linking } from 'react-native';
+import SafariView from 'react-native-safari-view';
 
 /**
  * Given a link, returns a function that, when triggered,
@@ -17,7 +18,18 @@ export const openURL = url => () =>
  * @return {funcion}           a function, when triggered, push the webview
  */
 export const openWebView = (uri, navigator) => () =>
-  navigator.push({
-    screen: 'profile.webview',
-    passProps: { uri },
-  });
+  SafariView.isAvailable()
+    .then(() =>
+      SafariView.show({
+        url: uri,
+      })
+    )
+    .catch(
+      () =>
+        // fall back to webview
+        !!navigator &&
+        navigator.push({
+          screen: 'profile.webview',
+          passProps: { uri },
+        })
+    );
