@@ -1,10 +1,14 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet } from 'react-native';
-import { Content, Text, View } from 'native-base';
+import { StyleSheet, FlatList } from 'react-native';
+import { List, Text, ListItem, Left, Body, Thumbnail } from 'native-base';
+import moment from 'moment';
 import Container from 'SafeContainer';
 import { getEvent } from './queries';
+import { openWebView } from 'utils';
 
-type Props = {};
+type Props = {
+  navigator: Object,
+};
 
 /**
  * An explorer to navigate other github content
@@ -32,6 +36,39 @@ class Explorer extends PureComponent<Props> {
         this.setState({ error: err.message });
       });
   };
+
+  renderEvent = ({ item }) => {
+    switch (item.type) {
+      case 'WatchEvent':
+        return (
+          <ListItem
+            avatar
+            style={styles.listitem}
+            onPress={openWebView(
+              item.repo.url.replace('api.github.com/repos', 'github.com'),
+              this.props.navigator
+            )}
+          >
+            <Left>
+              <Thumbnail
+                small
+                source={{ uri: item.actor.avatar_url }}
+                style={styles.avatar}
+              />
+            </Left>
+            <Body>
+              <Text>
+                {item.actor.login} starred {item.repo.name}
+              </Text>
+              <Text note>{moment(item.created_at).fromNow()}</Text>
+            </Body>
+          </ListItem>
+        );
+    }
+  };
+
+  eventKeyExtractor = event => event.id;
+
   render = () => {
     const { error, events } = this.state;
 
@@ -43,21 +80,25 @@ class Explorer extends PureComponent<Props> {
       )
     ) : (
       <Container>
-        <Content>
-          <View style={styles.centerContainer}>
-            <Text>{JSON.stringify(events, null, 4)}</Text>
-          </View>
-        </Content>
+        <List>
+          <FlatList
+            data={this.state.events}
+            keyExtractor={this.eventKeyExtractor}
+            renderItem={this.renderEvent}
+            onEndReached={this.fetchEvent}
+          />
+        </List>
       </Container>
     );
   };
 }
 
 const styles = StyleSheet.create({
-  centerContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
+  avatar: {
+    margin: 5,
+  },
+  listitem: {
+    paddingVertical: 5,
   },
 });
 
