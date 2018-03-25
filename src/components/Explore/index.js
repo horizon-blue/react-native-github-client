@@ -55,6 +55,16 @@ class Explorer extends PureComponent<Props> {
   };
 
   renderEvent = ({ item }) => {
+    const avatar = (
+      <TouchableOpacity onPress={this.handlePressUser(item.actor.login)}>
+        <Thumbnail
+          small
+          source={{ uri: item.actor.avatar_url }}
+          style={styles.avatar}
+        />
+      </TouchableOpacity>
+    );
+
     switch (item.type) {
       case 'WatchEvent':
         return (
@@ -66,17 +76,7 @@ class Explorer extends PureComponent<Props> {
               this.props.navigator
             )}
           >
-            <Left>
-              <TouchableOpacity
-                onPress={this.handlePressUser(item.actor.login)}
-              >
-                <Thumbnail
-                  small
-                  source={{ uri: item.actor.avatar_url }}
-                  style={styles.avatar}
-                />
-              </TouchableOpacity>
-            </Left>
+            <Left>{avatar}</Left>
             <Body>
               <Text>
                 {item.actor.login} starred {item.repo.name}
@@ -85,6 +85,73 @@ class Explorer extends PureComponent<Props> {
             </Body>
           </ListItem>
         );
+      case 'ForkEvent':
+        return (
+          <ListItem
+            avatar
+            style={styles.listitem}
+            onPress={openWebView(
+              item.payload.forkee.url.replace(
+                'api.github.com/repos',
+                'github.com'
+              ),
+              this.props.navigator
+            )}
+          >
+            <Left>{avatar}</Left>
+            <Body>
+              <Text>
+                {item.actor.login} forked {item.payload.forkee.name} from{' '}
+                {item.repo.name}
+              </Text>
+              <Text note>{moment(item.created_at).fromNow()}</Text>
+            </Body>
+          </ListItem>
+        );
+      case 'CreateEvent':
+        return (
+          <ListItem
+            avatar
+            style={styles.listitem}
+            onPress={openWebView(
+              item.repo.url.replace('api.github.com/repos', 'github.com'),
+              this.props.navigator
+            )}
+          >
+            <Left>{avatar}</Left>
+            <Body>
+              <Text>
+                {item.actor.login} created a repository {item.repo.name}
+              </Text>
+              <Text note>{moment(item.created_at).fromNow()}</Text>
+            </Body>
+          </ListItem>
+        );
+      case 'PushEvent':
+        return (
+          <ListItem
+            avatar
+            style={styles.listitem}
+            onPress={openWebView(
+              item.repo.url.replace('api.github.com/repos', 'github.com') +
+                '/commit/' +
+                item.payload.head,
+              this.props.navigator
+            )}
+          >
+            <Left>{avatar}</Left>
+            <Body>
+              <Text>
+                {item.actor.login} pushed to {item.repo.name}
+              </Text>
+              <Text note>{moment(item.created_at).fromNow()}</Text>
+            </Body>
+          </ListItem>
+        );
+      case 'MemberEvent':
+        return;
+      default:
+        console.warn(item);
     }
   };
 
