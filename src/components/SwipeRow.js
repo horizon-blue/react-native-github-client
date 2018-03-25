@@ -28,7 +28,7 @@ class SwipeRow extends PureComponent<Props> {
 
   _deltaX = new Animated.Value(0);
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     Dimensions.addEventListener('change', this.handleUpdate);
   };
 

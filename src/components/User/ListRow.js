@@ -13,7 +13,7 @@ type Props = {
  * The component used to display the content of each row in user's profile page
  */
 class ListRow extends PureComponent<Props> {
-  componentWillMount = () => {
+  componentDidMount = () => {
     Dimensions.addEventListener('change', this.handleUpdate);
   };
 
