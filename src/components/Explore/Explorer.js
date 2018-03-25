@@ -4,6 +4,7 @@ import { List, Text, ListItem, Left, Body, Thumbnail } from 'native-base';
 import moment from 'moment';
 import Container from 'SafeContainer';
 import { getEvent } from './queries';
+import { addLogoutListener, removeLogoutListener } from '../../auth';
 import { openWebView } from 'utils';
 
 type Props = {
@@ -23,6 +24,11 @@ class Explorer extends PureComponent<Props> {
   componentDidMount = () => {
     this.fetchEvent(false);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    addLogoutListener('refreshExplore', this.handleRefresh);
+  };
+
+  componentWillUnmount = () => {
+    removeLogoutListener('refreshExplore');
   };
 
   handlePressUser = (login: String) => () =>

@@ -29,10 +29,12 @@ const authLink = setContext((_, { headers }) =>
  * stored in ./config.js if no token is found
  * @type {ApolloClient}
  */
-const getClient = () =>
+const getClient = function() {
+  if (this.client) return this.client;
+
   // Get a fragment mathcer (for use in union type). Reference:
   // https://www.apollographql.com/docs/react/advanced/fragments.html#fragment-matcher
-  authFetch(GITHUB_GRAPHQL_API, 'post', {
+  return authFetch(GITHUB_GRAPHQL_API, 'post', {
     data: JSON.stringify({
       query: `
       {
@@ -65,26 +67,27 @@ const getClient = () =>
         })
     )
     .then(fragmentMatcher => new InMemoryCache({ fragmentMatcher }))
-    .then(
-      cache =>
-        new ApolloClient({
-          link: from([
-            onError(({ graphQLErrors, networkError }) => {
-              if (graphQLErrors)
-                graphQLErrors.map(({ message, locations, path }) =>
-                  console.log(
-                    `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-                  )
-                );
-              if (networkError) console.log(`[Network error]: ${networkError}`);
-            }),
-            authLink,
-            createHttpLink({
-              uri: GITHUB_GRAPHQL_API,
-            }),
-          ]),
-          cache,
-        })
-    );
+    .then(cache => {
+      this.client = new ApolloClient({
+        link: from([
+          onError(({ graphQLErrors, networkError }) => {
+            if (graphQLErrors)
+              graphQLErrors.map(({ message, locations, path }) =>
+                console.log(
+                  `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+                )
+              );
+            if (networkError) console.log(`[Network error]: ${networkError}`);
+          }),
+          authLink,
+          createHttpLink({
+            uri: GITHUB_GRAPHQL_API,
+          }),
+        ]),
+        cache,
+      });
+      return this.client;
+    });
+};
 
 export default getClient;

@@ -1,6 +1,7 @@
 import { Navigation } from 'react-native-navigation';
 import { AsyncStorage } from 'react-native';
-import client from './client';
+import _ from 'lodash/fp';
+import getClient from './client';
 
 export const login = async () => {
   const token = await AsyncStorage.getItem('token');
@@ -20,9 +21,20 @@ export const login = async () => {
   }
 };
 
+const onlogout = {};
+export const addLogoutListener = (key, callback) => {
+  onlogout[key] = callback;
+};
+
+export const removeLogoutListener = key => {
+  delete onlogout[key];
+};
+
 export const logout = () => {
   AsyncStorage.removeItem('token')
     .then(login)
-    .then(client.resetStore)
-    .catch(err => console.log(err));
+    .then(getClient().resetStore)
+    // execute each callback
+    .then(() => _.flow(_.values, _.forEach(callback => callback()))(onlogout))
+    .catch(err => console.error(err));
 };

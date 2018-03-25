@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { authFetch } from 'utils';
 
-import client from '../../client';
+import getClient from '../../client';
 
 const refreshUser = gql`
   query($login: String!) {
@@ -17,7 +17,7 @@ export const followUser = login => () =>
   authFetch(`https://api.github.com/user/following/${login}`, 'put', {
     headers: { 'Content-Length': 0 },
   }).then(() =>
-    client.query({
+    getClient().query({
       query: refreshUser,
       fetchPolicy: 'network-only',
       variables: { login },
@@ -28,7 +28,7 @@ export const unfollowUser = login => () =>
   authFetch(`https://api.github.com/user/following/${login}`, 'delete', {
     headers: { 'Content-Length': 0 },
   }).then(() =>
-    client.query({
+    getClient().query({
       query: refreshUser,
       fetchPolicy: 'network-only',
       variables: { login },
