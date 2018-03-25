@@ -18,7 +18,7 @@ const authFetch = (url, method, config) =>
         'User-Agent': 'React Native GitHub Client',
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Bearer ${token}`,
-        ...config.headers,
+        ...(config ? config.headers : {}),
       },
     })
   );

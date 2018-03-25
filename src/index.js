@@ -38,11 +38,6 @@ const run = () => {
         },
       },
     ],
-    tabsStyle: {
-      // set initial screen to User page because explore page hasn't been
-      // implemented yet
-      initialTabIndex: 1,
-    },
   });
 };
 
