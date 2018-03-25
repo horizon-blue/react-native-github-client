@@ -1,27 +1,26 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
-import {
-  Container,
-  Input,
-  Item,
-  View,
-  List,
-  Text,
-  Tabs,
-  Tab,
-} from 'native-base';
+import { Input, Item, View, List, Text, Tabs, Tab } from 'native-base';
 import { Query } from 'react-apollo';
 
 import { searchQuery } from './queries';
+import SearchRepositoryList from './SearchRepositoryList';
+import Container from './SafeContainer';
 
-class Search extends PureComponent {
+type Props = {
+  navigator: Object,
+};
+
+class Search extends PureComponent<Props> {
   state = {};
   timer = null;
+
+  componentWillUnmount = () => clearTimeout(this.timer);
 
   handleChangeQuery = text => {
     clearTimeout(this.timer);
     this.setState({ text });
-    this.timer = setTimeout(this.updateQuery, 1000);
+    this.timer = setTimeout(this.updateQuery, 500);
   };
 
   updateQuery = () => this.setState({ query: this.state.text });
@@ -44,14 +43,12 @@ class Search extends PureComponent {
           />
         </Item>
       </View>
-      <Tabs>
+      <Tabs locked>
         <Tab heading="Repository">
-          <Query
-            query={searchQuery}
-            variables={{ query: this.state.query, type: 'REPOSITORY' }}
-          >
-            {this.renderSearchResult}
-          </Query>
+          <SearchRepositoryList
+            query={this.state.query}
+            navigator={this.props.navigator}
+          />
         </Tab>
         <Tab heading="User">
           <Query

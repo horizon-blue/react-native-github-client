@@ -1,5 +1,14 @@
 import gql from 'graphql-tag';
 
+export const userFields = `
+id
+name
+login
+viewerIsFollowing
+avatarUrl
+bio
+`;
+
 /**
  * Return the graphql query for given fields
  * @param  {String} field field to be quired
@@ -18,12 +27,7 @@ export const getQuery = (
         totalCount
         edges {
           node {
-            id
-            name
-            login
-            viewerIsFollowing
-            avatarUrl
-            bio
+            ${userFields}
           }
           cursor
         }
