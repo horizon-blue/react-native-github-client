@@ -14,7 +14,7 @@ import type { Node } from 'react';
 import Container from 'SafeContainer';
 import SwipeRow from 'SwipeRow';
 import { getQuery } from './queries';
-import { followUser } from './mutations';
+import { followUser, unfollowUser } from './mutations';
 import { warpQueries } from 'utils';
 
 type Props = {
@@ -23,6 +23,7 @@ type Props = {
   },
   users: [Object],
   fetchMore: Node => null,
+  refetch: Node => null,
   navigator: Object,
   userType: String,
 };
@@ -72,7 +73,7 @@ class UserList extends PureComponent<Props> {
             }
           : { name: 'person-add', text: 'Follow', color: 'goldenrod' }
       }
-      onPressButton={(node.viewerIsFollowing ? followUser : followUser)(
+      onPressButton={(node.viewerIsFollowing ? unfollowUser : followUser)(
         node.login
       )}
     >
@@ -102,6 +103,8 @@ class UserList extends PureComponent<Props> {
           renderItem={this.renderUser}
           keyExtractor={this.userKeyExtractor}
           onEndReached={this.props.fetchMore(this)}
+          onRefresh={this.props.refetch(this)}
+          refreshing={this.state.refreshing}
         />
       </List>
     </Container>

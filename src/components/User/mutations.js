@@ -1,5 +1,6 @@
-import { AsyncStorage } from 'react-native';
 import { gql } from 'apollo-boost';
+import { authFetch } from 'utils';
+
 import client from '../../client';
 
 const refreshUser = gql`
@@ -13,15 +14,23 @@ const refreshUser = gql`
 
 // GitHub GraphQL API does not have follow / unfollow functionality yet
 export const followUser = login => () =>
-  AsyncStorage.getItem('token').then(token =>
-    fetch(`https://api.github.com/user/following/${login}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': 0,
-        Authorization: `Bearer ${token}`,
-      },
-    }).then(() =>
-      client.query({ query: refreshUser, fetchPolicy: 'network-only' })
-    )
+  authFetch(`https://api.github.com/user/following/${login}`, 'put', {
+    'Content-Length': 0,
+  }).then(() =>
+    client.query({
+      query: refreshUser,
+      fetchPolicy: 'network-only',
+      variables: { login },
+    })
+  );
+
+export const unfollowUser = login => () =>
+  authFetch(`https://api.github.com/user/following/${login}`, 'delete', {
+    'Content-Length': 0,
+  }).then(() =>
+    client.query({
+      query: refreshUser,
+      fetchPolicy: 'network-only',
+      variables: { login },
+    })
   );

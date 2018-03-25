@@ -20,6 +20,7 @@ import type { Node } from 'react';
 import Container from 'SafeContainer';
 import { openURL, warpQueries } from 'utils';
 import { getUserQuery } from './queries';
+import { followUser, unfollowUser } from './mutations';
 import ListRow from './ListRow';
 
 // map graphql query item with iconname & labelname
@@ -214,9 +215,25 @@ class User extends PureComponent<Props> {
               onPress={this.handlePressOwnRepo}
               last={true}
             />
-            {!this.props.login && (
-              <Button full transparent danger onPress={this.props.logout}>
-                <Text>Logout</Text>
+
+            {viewer.isViewer ? (
+              this.props.logout ? (
+                <Button full transparent danger onPress={this.props.logout}>
+                  <Text>Logout</Text>
+                </Button>
+              ) : null
+            ) : viewer.viewerIsFollowing ? (
+              <Button
+                full
+                transparent
+                danger
+                onPress={unfollowUser(viewer.login)}
+              >
+                <Text>Unfollow</Text>
+              </Button>
+            ) : (
+              <Button full transparent onPress={followUser(viewer.login)}>
+                <Text>Follow</Text>
               </Button>
             )}
           </List>

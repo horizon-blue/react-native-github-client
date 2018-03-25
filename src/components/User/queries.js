@@ -50,6 +50,8 @@ export const getUserQuery = (_a, _b, isViewer) => gql`
       company
       createdAt
       location
+      isViewer
+      viewerIsFollowing
       followers {
         totalCount
       }
