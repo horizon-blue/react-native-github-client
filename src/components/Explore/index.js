@@ -148,10 +148,6 @@ class Explorer extends PureComponent<Props> {
             </Body>
           </ListItem>
         );
-      case 'MemberEvent':
-        return;
-      default:
-        console.warn(item);
     }
   };
 
