@@ -1,6 +1,15 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
-import { Container, Input, Item, View, List, Text } from 'native-base';
+import {
+  Container,
+  Input,
+  Item,
+  View,
+  List,
+  Text,
+  Tabs,
+  Tab,
+} from 'native-base';
 import { Query } from 'react-apollo';
 
 import { searchQuery } from './queries';
@@ -34,20 +43,33 @@ class Search extends PureComponent {
             autoCapitalize="none"
           />
         </Item>
-        <Query
-          query={searchQuery}
-          variables={{ query: this.state.query, type: 'REPOSITORY' }}
-        >
-          {this.renderSearchResult}
-        </Query>
       </View>
+      <Tabs>
+        <Tab heading="Repository">
+          <Query
+            query={searchQuery}
+            variables={{ query: this.state.query, type: 'REPOSITORY' }}
+          >
+            {this.renderSearchResult}
+          </Query>
+        </Tab>
+        <Tab heading="User">
+          <Query
+            query={searchQuery}
+            variables={{ query: this.state.query, type: 'USER' }}
+          >
+            {this.renderSearchResult}
+          </Query>
+        </Tab>
+      </Tabs>
     </Container>
   );
 }
 
 const styles = StyleSheet.create({
   searchContainer: {
-    margin: 10,
+    padding: 10,
+    backgroundColor: '#F8F8F8',
   },
 });
 

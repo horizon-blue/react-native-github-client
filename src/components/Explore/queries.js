@@ -9,21 +9,16 @@ export const getEvent = (page = 1) =>
     })
   );
 
-const repoFragment = gql`
-fragment RepoFragment on Repository {
-  ${repoFields}
-}
-`;
-
 export const searchQuery = gql`
   query($query: String!, $type: SearchType!, $before: String) {
     search(query: $query, type: $type, last: 10, before: $before) {
       edges {
         node {
-          ...RepoFragment
+          ...on Repository {
+            ${repoFields}
+          }
         }
       }
     }
   }
-  ${repoFragment}
 `;
