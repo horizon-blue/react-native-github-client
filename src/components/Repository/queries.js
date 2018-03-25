@@ -1,4 +1,24 @@
 import { gql } from 'apollo-boost';
+
+export const repoFields = `
+  id
+  nameWithOwner
+  name
+  description
+  viewerHasStarred
+  primaryLanguage {
+    id
+    color
+    name
+  }
+  url
+  isPrivate
+  forkCount
+  stargazers {
+    totalCount
+  }
+`;
+
 /**
  * Return the graphql query for given fields
  * @param  {String} field field to be quired
@@ -16,22 +36,7 @@ export const getQuery = (
       ${field}(last: 10, before: $before, ${rest || ''}) {
         edges {
           node {
-            id
-            nameWithOwner
-            name
-            description
-            viewerHasStarred
-            primaryLanguage {
-              id
-              color
-              name
-            }
-            url
-            isPrivate
-            forkCount
-            stargazers {
-              totalCount
-            }
+            ${repoFields}
           }
           cursor
         }

@@ -27,6 +27,14 @@ const run = () => {
         screen: 'explore', // placeholder
         title: 'Explore',
         icon: icons.globe,
+        navigatorButtons: {
+          rightButtons: [
+            {
+              id: 'search',
+              icon: icons.search,
+            },
+          ],
+        },
       },
       {
         label: 'User',
@@ -42,7 +50,7 @@ const run = () => {
 };
 
 // load the icons and start the main app
-loadIcons(['user', 'globe'])
+loadIcons(['user', 'globe', 'search'])
   .then(resources => (icons = resources))
   .then(login)
   .then(run)

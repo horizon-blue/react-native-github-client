@@ -2,7 +2,7 @@ import { Navigation } from 'react-native-navigation';
 import type { Node } from 'react';
 
 import { User, UserList, Login } from './components/User';
-import Explore from './components/Explore';
+import { Explorer, Search } from './components/Explore';
 import { RepositoryList } from './components/Repository';
 import { WebView, BrowserButton } from './components/WebView';
 
@@ -22,7 +22,8 @@ export default (store, Provider, client) => {
   registerPage('profile.user', User);
   registerPage('profile.user.list', UserList);
   registerPage('profile.user.login', Login);
-  registerPage('explore', Explore);
+  registerPage('explore', Explorer);
+  registerPage('explore.search', Search);
   registerPage('profile.repository.list', RepositoryList);
   registerPage('profile.webview', WebView);
 
