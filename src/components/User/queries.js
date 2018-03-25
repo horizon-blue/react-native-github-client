@@ -21,6 +21,7 @@ export const getQuery = (
             id
             name
             login
+            viewerIsFollowing
             avatarUrl
             bio
           }

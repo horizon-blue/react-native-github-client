@@ -23,10 +23,16 @@ const transformProps = (ownPropName, propName, isViewer) => ({
     };
   const actor = isViewer ? viewer : user;
 
+  const safeRefetch = component => () => {
+    component.setState({ refreshing: true });
+    refetch().then(() => component.setState({ refreshing: false }));
+  };
+
   if (!ownPropName)
     return {
       data: rest,
       viewer: actor,
+      refetch: safeRefetch,
     };
 
   const props = actor[ownProps[ownPropName]];
@@ -48,10 +54,7 @@ const transformProps = (ownPropName, propName, isViewer) => ({
         },
       });
     },
-    refetch: component => () => {
-      component.setState({ refreshing: true });
-      refetch().then(() => component.setState({ refreshing: false }));
-    },
+    refetch: safeRefetch,
     data: rest,
   };
 };

@@ -12,7 +12,9 @@ import {
 } from 'native-base';
 import type { Node } from 'react';
 import Container from 'SafeContainer';
+import SwipeRow from 'SwipeRow';
 import { getQuery } from './queries';
+import { followUser } from './mutations';
 import { warpQueries } from 'utils';
 
 type Props = {
@@ -30,6 +32,10 @@ type Props = {
  * @extends PureComponent
  */
 class UserList extends PureComponent<Props> {
+  state = {
+    refreshing: false,
+  };
+
   /**
    * Open the User page to display information related to the specific user when
    * it is being pressed
@@ -56,21 +62,36 @@ class UserList extends PureComponent<Props> {
    *                      in the list
    */
   renderUser = ({ item: { node } }) => (
-    <ListItem avatar onPress={this.handleClickUser(node.login)}>
-      <Left>
-        <Thumbnail source={{ uri: node.avatarUrl }} style={styles.avatar} />
-      </Left>
-      <Body>
-        <Row>
-          {!!node.name && <Text style={styles.nameText}>{node.name}</Text>}
-          <Text style={styles.usernameText}>{node.login}</Text>
-        </Row>
-        <Text note numberOfLines={2} style={styles.bioText}>
-          {node.bio}
-        </Text>
-      </Body>
-      <Right />
-    </ListItem>
+    <SwipeRow
+      icon={
+        node.viewerIsFollowing
+          ? {
+              name: 'person-outline',
+              text: 'Unfollow',
+              color: 'firebrick',
+            }
+          : { name: 'person-add', text: 'Follow', color: 'goldenrod' }
+      }
+      onPressButton={(node.viewerIsFollowing ? followUser : followUser)(
+        node.login
+      )}
+    >
+      <ListItem avatar onPress={this.handleClickUser(node.login)}>
+        <Left>
+          <Thumbnail source={{ uri: node.avatarUrl }} style={styles.avatar} />
+        </Left>
+        <Body>
+          <Row>
+            {!!node.name && <Text style={styles.nameText}>{node.name}</Text>}
+            <Text style={styles.usernameText}>{node.login}</Text>
+          </Row>
+          <Text note numberOfLines={2} style={styles.bioText}>
+            {node.bio}
+          </Text>
+        </Body>
+        <Right />
+      </ListItem>
+    </SwipeRow>
   );
 
   render = () => (

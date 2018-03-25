@@ -55,11 +55,11 @@ class RepositoryList extends PureComponent<Props> {
                 icon={
                   node.viewerHasStarred
                     ? {
-                        name: 'md-star-outline',
+                        name: 'star-border',
                         text: 'Unstar',
                         color: 'steelblue',
                       }
-                    : { name: 'md-star', text: 'Star', color: 'goldenrod' }
+                    : { name: 'star', text: 'Star', color: 'goldenrod' }
                 }
                 onPressButton={() =>
                   (node.viewerHasStarred ? removeStar : addStar)({

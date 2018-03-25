@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, RefreshControl } from 'react-native';
 import {
   Content,
   Text,
@@ -52,6 +52,7 @@ type Props = {
   viewer: Object,
   login: ?String,
   logout: null => null,
+  refetch: Node => null,
 };
 
 /**
@@ -59,6 +60,9 @@ type Props = {
  * @extends PureComponent
  */
 class User extends PureComponent<Props> {
+  state = {
+    refreshing: false,
+  };
   /**
    * the function map the list of information avaliable for the user to
    * a list of React component. If any of the information is missing, it
@@ -141,7 +145,14 @@ class User extends PureComponent<Props> {
       <Text>Connection error</Text>
     ) : (
       <Container>
-        <Content>
+        <Content
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.props.refetch(this)}
+            />
+          }
+        >
           <List>
             <ListItem noBorder>
               <Body style={styles.centerContainer}>

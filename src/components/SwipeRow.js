@@ -1,7 +1,14 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, View, Animated, Dimensions } from 'react-native';
-import { Icon, Button, Text } from 'native-base';
+import {
+  StyleSheet,
+  View,
+  Animated,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
+import { Text } from 'native-base';
 import Interactable from 'react-native-interactable';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import type { Node } from 'react';
 
@@ -59,15 +66,13 @@ class SwipeRow extends PureComponent<Props> {
               },
             ]}
           >
-            <Button
-              transparent
-              vertical
+            <TouchableOpacity
               onPress={this.props.onPressButton}
               style={styles.button}
             >
-              <Icon style={styles.icon} name={this.props.icon.name} />
+              <Icon size={32} name={this.props.icon.name} color="#fff" />
               <Text style={styles.text}>{this.props.icon.text}</Text>
-            </Button>
+            </TouchableOpacity>
           </Animated.View>
         )}
 
@@ -108,17 +113,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 0,
   },
-  icon: {
-    fontSize: 35,
-    color: 'white',
-  },
   button: {
     width: 78,
     paddingBottom: 10,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 12,
   },
 });
 
