@@ -15,7 +15,7 @@ const refreshUser = gql`
 // GitHub GraphQL API does not have follow / unfollow functionality yet
 export const followUser = login => () =>
   authFetch(`https://api.github.com/user/following/${login}`, 'put', {
-    'Content-Length': 0,
+    headers: { 'Content-Length': 0 },
   }).then(() =>
     client.query({
       query: refreshUser,
@@ -26,7 +26,7 @@ export const followUser = login => () =>
 
 export const unfollowUser = login => () =>
   authFetch(`https://api.github.com/user/following/${login}`, 'delete', {
-    'Content-Length': 0,
+    headers: { 'Content-Length': 0 },
   }).then(() =>
     client.query({
       query: refreshUser,
