@@ -5,7 +5,7 @@ import { Query } from 'react-apollo';
 
 import { searchQuery } from './queries';
 import SearchRepositoryList from './SearchRepositoryList';
-import Container from './SafeContainer';
+import Container from 'SafeContainer';
 
 type Props = {
   navigator: Object,
@@ -20,7 +20,7 @@ class Search extends PureComponent<Props> {
   handleChangeQuery = text => {
     clearTimeout(this.timer);
     this.setState({ text });
-    this.timer = setTimeout(this.updateQuery, 500);
+    this.timer = setTimeout(this.updateQuery, 1000);
   };
 
   updateQuery = () => this.setState({ query: this.state.text });
