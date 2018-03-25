@@ -1,16 +1,15 @@
 import { Navigation } from 'react-native-navigation';
-import { ApolloProvider } from 'react-apollo';
 import SplashScreen from 'react-native-splash-screen';
 
-import registerScreens from './screens';
+import { registerScreens, registerGraphQLScreens } from './screens';
 import { loadIcons, disableWarning } from 'utils';
-import client from './client';
+import getClient from './client';
 import { login, logout } from './auth';
 
 disableWarning();
 
 // Register all screens using react-native-navigation
-registerScreens(client.store, ApolloProvider, client);
+registerScreens();
 
 let icons = {};
 /**
@@ -52,7 +51,9 @@ const run = () => {
 // load the icons and start the main app
 loadIcons(['user', 'globe', 'search'])
   .then(resources => (icons = resources))
-  .then(login)
-  .then(run)
   .then(() => SplashScreen.hide())
+  .then(login)
+  .then(getClient)
+  .then(registerGraphQLScreens)
+  .then(run)
   .catch(error => console.error(error));
