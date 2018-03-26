@@ -68,6 +68,7 @@ const getClient = function() {
         })
     )
     .then(fragmentMatcher => new InMemoryCache({ fragmentMatcher }))
+    .catch(() => new InMemoryCache()) // do not use fragment when offline
     .then(cache => {
       persistCache({
         cache,

@@ -15,17 +15,20 @@ const transformProps = (ownPropName, propName, isViewer) => ({
   ownProps,
   data: { viewer, user, fetchMore, refetch, ...rest },
 }) => {
-  if (rest.loading || rest.error)
+  const actor = isViewer ? viewer : user;
+
+  if (rest.loading || !actor)
     return {
       data: rest,
       fetchMore: () => {},
       refetch: () => {},
     };
-  const actor = isViewer ? viewer : user;
 
   const safeRefetch = component => () => {
     component.setState({ refreshing: true });
-    refetch().then(() => component.setState({ refreshing: false }));
+    refetch()
+      .then(() => component.setState({ refreshing: false }))
+      .catch(err => console.log(err.message));
   };
 
   if (!ownPropName)
@@ -52,7 +55,7 @@ const transformProps = (ownPropName, propName, isViewer) => ({
           component.isFetchingMore = false;
           return deepMerge(fetchMoreResult, previousResult);
         },
-      });
+      }).catch(err => console.log(err.message));
     },
     refetch: safeRefetch,
     data: rest,

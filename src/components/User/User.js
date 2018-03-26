@@ -137,7 +137,7 @@ class User extends PureComponent<Props> {
     const { data: { loading, error }, viewer } = this.props;
 
     // log the error, if any
-    error && console.error(error);
+    error && console.log(error);
 
     // render the main content if and only if the data were successfully loaded
     return loading ? (
