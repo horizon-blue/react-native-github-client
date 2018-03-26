@@ -21,6 +21,14 @@ export const searchQuery = gql`
           ...on User {
             ${userFields}
           }
+          ...on Organization {
+            id
+            avatarUrl
+            login
+            bio:description
+            name
+            url
+          }
         }
         cursor
       }

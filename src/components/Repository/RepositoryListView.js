@@ -14,7 +14,7 @@ type Props = {
   fetchMore: Node => null,
   refetch: Node => null,
   navigator: Object,
-  repoType: String,
+  repoType: ?String,
   login: ?String,
 };
 

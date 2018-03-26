@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
-import { Input, Item, View, List, Text, Tabs, Tab } from 'native-base';
-import { Query } from 'react-apollo';
+import { Input, Item, View, Tabs, Tab } from 'native-base';
 
-import { searchQuery } from './queries';
 import SearchRepositoryList from './SearchRepositoryList';
+import SearchUserList from './SearchUserList';
 import Container from 'SafeContainer';
 
 type Props = {
@@ -29,12 +28,6 @@ class Search extends PureComponent<Props> {
 
   updateQuery = () => this.setState({ query: this.state.text });
 
-  renderSearchResult = ({ data }) => (
-    <List>
-      <Text>{JSON.stringify(data, null, 4)}</Text>
-    </List>
-  );
-
   render = () => (
     <Container>
       <View style={styles.searchContainer}>
@@ -55,12 +48,10 @@ class Search extends PureComponent<Props> {
           />
         </Tab>
         <Tab heading="User">
-          <Query
-            query={searchQuery}
-            variables={{ query: this.state.query, type: 'USER' }}
-          >
-            {this.renderSearchResult}
-          </Query>
+          <SearchUserList
+            query={this.state.query}
+            navigator={this.props.navigator}
+          />
         </Tab>
       </Tabs>
     </Container>
