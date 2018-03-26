@@ -53,7 +53,22 @@ it('repository list view render correctly', () => {
             refetch={() => null}
             fetchMore={() => null}
             repositories={repoList}
-            data={{ loading: false }}
+          />
+        </ApolloProvider>
+      )
+      .toJSON()
+  ).toMatchSnapshot();
+});
+
+it('repository list empty', () => {
+  expect(
+    renderer
+      .create(
+        <ApolloProvider client={{}}>
+          <RepositoryListView
+            refetch={() => null}
+            fetchMore={() => null}
+            repositories={[]}
           />
         </ApolloProvider>
       )
