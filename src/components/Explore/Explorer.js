@@ -24,8 +24,10 @@ class Explorer extends PureComponent<Props> {
   };
   componentDidMount = () => {
     AsyncStorage.getItem('events')
-      .then(events => this.setState({ events: JSON.parse(events) || [] }))
-      .then(() => this.fetchEvent(true))
+      .then(
+        events => this.setState({ events: JSON.parse(events) || [] }),
+        () => this.fetchEvent(true)
+      )
       .catch(err => console.log(err));
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     addLogoutListener('refreshExplore', this.handleRefresh);

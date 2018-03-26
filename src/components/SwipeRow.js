@@ -93,6 +93,7 @@ class SwipeRow extends PureComponent<Props> {
           ]}
           animatedValueX={this._deltaX}
           dragEnabled={!!this.props.icon}
+          boundaries={{ right: 0 }}
         >
           {this.props.children}
         </Interactable.View>
