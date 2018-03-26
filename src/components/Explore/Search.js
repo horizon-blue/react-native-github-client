@@ -10,6 +10,10 @@ type Props = {
   navigator: Object,
 };
 
+/**
+ * A component to do and display search result
+ * @extends PureComponent
+ */
 class Search extends PureComponent<Props> {
   static navigatorStyle = {
     tabBarHidden: true,
@@ -20,12 +24,19 @@ class Search extends PureComponent<Props> {
 
   componentWillUnmount = () => clearTimeout(this.timer);
 
+  /**
+   * Wait for 1 second after user stop typing to begin searching
+   * @param  {String} text current text in search field
+   */
   handleChangeQuery = text => {
     clearTimeout(this.timer);
     this.setState({ text });
     this.timer = setTimeout(this.updateQuery, 1000);
   };
 
+  /**
+   * make the query as the same as the text in search bar
+   */
   updateQuery = () => this.setState({ query: this.state.text });
 
   render = () => (

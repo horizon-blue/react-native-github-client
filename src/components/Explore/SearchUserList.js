@@ -12,6 +12,10 @@ type Props = {
   navigator: Object,
 };
 
+/**
+ * The view that display user search results
+ * @extends PureComponent
+ */
 class SearchUserList extends PureComponent<Props> {
   handleRefetch = refetch => listview => () => {
     if (listview.state.refreshing) return;

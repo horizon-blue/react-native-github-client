@@ -12,6 +12,10 @@ type Props = {
   navigator: Object,
 };
 
+/**
+ * The view that display repository search results
+ * @extends PureComponent
+ */
 class SearchRepositoryList extends PureComponent<Props> {
   handleRefetch = refetch => listview => () => {
     if (listview.state.refreshing) return;

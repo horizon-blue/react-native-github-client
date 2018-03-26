@@ -24,6 +24,11 @@ class ExplorerView extends PureComponent<Props> {
       passProps: { login },
     });
 
+  /**
+   * Render events based on its type
+   * @param  {Object} item the item corresponds to the event
+   * @return {Node}       react node corresponds to the rendered event
+   */
   renderEvent = ({ item }) => {
     const avatar = (
       <TouchableOpacity onPress={this.handlePressUser(item.actor.login)}>
