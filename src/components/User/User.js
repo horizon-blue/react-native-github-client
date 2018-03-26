@@ -47,7 +47,6 @@ const profileMap = {
 type Props = {
   data: {
     loading: Boolean,
-    user: ?Object,
   },
   navigator: Object,
   viewer: Object,
@@ -256,6 +255,8 @@ const styles = StyleSheet.create({
     color: 'darkgray',
   },
 });
+
+export { User as UserView };
 
 // Compose queires
 export default warpQueries(getUserQuery)(User)([null]);

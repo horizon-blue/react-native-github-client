@@ -44,6 +44,40 @@ it('explorer list display events', () => {
       },
       created_at: '2018-03-26T02:48:28Z',
     },
+    {
+      id: '12987423',
+      type: 'ForkEvent',
+      actor: {
+        login: 'foo',
+        avatar_url: '',
+      },
+      payload: {
+        forkee: {
+          url: '',
+          name: 'asdf',
+        },
+      },
+      repo: {
+        name: 'asdf',
+      },
+      created_at: '2018-03-26T02:48:28Z',
+    },
+    {
+      id: '230405',
+      type: 'PushEvent',
+      actor: {
+        login: 'foo',
+        avatar_url: '',
+      },
+      payload: {
+        head: '1a2b3c',
+      },
+      repo: {
+        name: 'asdf',
+        url: '',
+      },
+      created_at: '2018-03-26T02:48:28Z',
+    },
   ];
 
   expect(
