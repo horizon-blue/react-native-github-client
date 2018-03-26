@@ -283,7 +283,7 @@ exports[`explorer list display events 1`] = `
                     uppercase={false}
                     virtual={undefined}
                   >
-                    2 hours ago
+                    in a year
                   </Text>
                 </View>
               </View>
@@ -448,7 +448,7 @@ exports[`explorer list display events 1`] = `
                     uppercase={false}
                     virtual={undefined}
                   >
-                    3 hours ago
+                    in a year
                   </Text>
                 </View>
               </View>
@@ -616,7 +616,7 @@ exports[`explorer list display events 1`] = `
                     uppercase={false}
                     virtual={undefined}
                   >
-                    3 hours ago
+                    in a year
                   </Text>
                 </View>
               </View>
@@ -781,7 +781,7 @@ exports[`explorer list display events 1`] = `
                     uppercase={false}
                     virtual={undefined}
                   >
-                    3 hours ago
+                    in a year
                   </Text>
                 </View>
               </View>

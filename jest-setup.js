@@ -14,4 +14,6 @@ jest.mock('react-native-safari-view', () => {
   };
 });
 
+Date.now = jest.fn(() => new Date(Date.UTC(2017, 1, 1)).valueOf());
+
 module.exports = SafariView;
