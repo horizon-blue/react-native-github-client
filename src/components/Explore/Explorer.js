@@ -3,6 +3,7 @@ import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { List, Text, ListItem, Left, Body, Thumbnail } from 'native-base';
 import moment from 'moment';
 import Container from 'SafeContainer';
+import { AsyncStorage } from 'react-native';
 import { getEvent } from './queries';
 import { addLogoutListener, removeLogoutListener } from '../../auth';
 import { openWebView } from 'utils';
@@ -22,7 +23,10 @@ class Explorer extends PureComponent<Props> {
     refreshing: false,
   };
   componentDidMount = () => {
-    this.fetchEvent(false);
+    AsyncStorage.getItem('events')
+      .then(events => this.setState({ events: JSON.parse(events) || [] }))
+      .then(() => this.fetchEvent(true))
+      .catch(err => console.log(err));
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     addLogoutListener('refreshExplore', this.handleRefresh);
   };
@@ -61,16 +65,24 @@ class Explorer extends PureComponent<Props> {
       .then(res => {
         this.loading = false;
         this.page = page + 1;
-        this.setState({
-          events: (refresh ? [] : this.state.events).concat(res.data),
-          refreshing: false,
-        });
+        this.setState(
+          {
+            events: (refresh ? [] : this.state.events).concat(res.data),
+            refreshing: false,
+          },
+          this.storeEvents
+        );
       })
       .catch(err => {
         this.loading = false;
         this.setState({ error: err.message, refreshing: false });
       });
   };
+
+  storeEvents = () =>
+    AsyncStorage.setItem('events', JSON.stringify(this.state.events)).catch(
+      err => console.log(err)
+    );
 
   renderEvent = ({ item }) => {
     const avatar = (
