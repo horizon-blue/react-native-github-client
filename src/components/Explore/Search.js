@@ -60,7 +60,8 @@ class Search extends PureComponent<Props> {
 
 const styles = StyleSheet.create({
   searchContainer: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingTop: 10,
     backgroundColor: '#F8F8F8',
   },
 });
