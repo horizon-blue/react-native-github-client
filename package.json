@@ -49,6 +49,12 @@
     "react-test-renderer": "^16.3.0-alpha.1"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "transformIgnorePatterns": [
+      "/node_modules/(?!native-base|react-native-safari-view)/"
+    ],
+    "setupFiles": [
+      "<rootDir>/jest-setup.js"
+    ]
   }
 }

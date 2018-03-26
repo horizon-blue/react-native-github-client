@@ -9,7 +9,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["storybook/**"]
+        "devDependencies": ["__tests__/**", "jest-setup.js"]
       }
     ],
     "import/extensions": ["error", { "js": "never" }],
