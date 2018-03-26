@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { List, Text, ListItem, Left, Body, Thumbnail } from 'native-base';
-import moment from 'moment';
-import Container from 'SafeContainer';
+import { Text } from 'native-base';
 import { AsyncStorage } from 'react-native';
 import { getEvent } from './queries';
 import { addLogoutListener, removeLogoutListener } from '../../auth';
-import { openWebView } from 'utils';
+import ExplorerView from './ExplorerView';
+import _ from 'lodash';
 
 type Props = {
   navigator: Object,
@@ -59,17 +57,20 @@ class Explorer extends PureComponent<Props> {
   fetchEvent = (refresh = false) => {
     if (this.loading || this.state.refreshing) return;
     this.loading = true;
-
     const page = refresh ? 1 : this.page;
     if (refresh) this.setState({ refreshing: true });
 
-    getEvent(page)
+    return getEvent(page)
       .then(res => {
         this.loading = false;
         this.page = page + 1;
         this.setState(
           {
-            events: (refresh ? [] : this.state.events).concat(res.data),
+            events: _.unionBy(
+              refresh ? [] : this.state.events,
+              res.data,
+              event => event.id
+            ),
             refreshing: false,
           },
           this.storeEvents
@@ -86,107 +87,8 @@ class Explorer extends PureComponent<Props> {
       err => console.log(err)
     );
 
-  renderEvent = ({ item }) => {
-    const avatar = (
-      <TouchableOpacity onPress={this.handlePressUser(item.actor.login)}>
-        <Thumbnail
-          small
-          source={{ uri: item.actor.avatar_url }}
-          style={styles.avatar}
-        />
-      </TouchableOpacity>
-    );
-
-    switch (item.type) {
-      case 'WatchEvent':
-        return (
-          <ListItem
-            avatar
-            style={styles.listitem}
-            onPress={openWebView(
-              item.repo.url.replace('api.github.com/repos', 'github.com'),
-              this.props.navigator
-            )}
-          >
-            <Left>{avatar}</Left>
-            <Body>
-              <Text>
-                {item.actor.login} starred {item.repo.name}
-              </Text>
-              <Text note>{moment(item.created_at).fromNow()}</Text>
-            </Body>
-          </ListItem>
-        );
-      case 'ForkEvent':
-        return (
-          <ListItem
-            avatar
-            style={styles.listitem}
-            onPress={openWebView(
-              item.payload.forkee.url.replace(
-                'api.github.com/repos',
-                'github.com'
-              ),
-              this.props.navigator
-            )}
-          >
-            <Left>{avatar}</Left>
-            <Body>
-              <Text>
-                {item.actor.login} forked {item.payload.forkee.name} from{' '}
-                {item.repo.name}
-              </Text>
-              <Text note>{moment(item.created_at).fromNow()}</Text>
-            </Body>
-          </ListItem>
-        );
-      case 'CreateEvent':
-        return (
-          <ListItem
-            avatar
-            style={styles.listitem}
-            onPress={openWebView(
-              item.repo.url.replace('api.github.com/repos', 'github.com'),
-              this.props.navigator
-            )}
-          >
-            <Left>{avatar}</Left>
-            <Body>
-              <Text>
-                {item.actor.login} created a repository {item.repo.name}
-              </Text>
-              <Text note>{moment(item.created_at).fromNow()}</Text>
-            </Body>
-          </ListItem>
-        );
-      case 'PushEvent':
-        return (
-          <ListItem
-            avatar
-            style={styles.listitem}
-            onPress={openWebView(
-              item.repo.url.replace('api.github.com/repos', 'github.com') +
-                '/commit/' +
-                item.payload.head,
-              this.props.navigator
-            )}
-          >
-            <Left>{avatar}</Left>
-            <Body>
-              <Text>
-                {item.actor.login} pushed to {item.repo.name}
-              </Text>
-              <Text note>{moment(item.created_at).fromNow()}</Text>
-            </Body>
-          </ListItem>
-        );
-    }
-  };
-
-  eventKeyExtractor = event => event.id;
-
   render = () => {
-    const { error, events } = this.state;
+    const { error, events, refreshing } = this.state;
 
     return events.length === 0 ? (
       error ? (
@@ -195,29 +97,15 @@ class Explorer extends PureComponent<Props> {
         <Text>Loading...</Text>
       )
     ) : (
-      <Container>
-        <List>
-          <FlatList
-            data={this.state.events}
-            keyExtractor={this.eventKeyExtractor}
-            renderItem={this.renderEvent}
-            onEndReached={this.handleLoadMore}
-            onRefresh={this.handleRefresh}
-            refreshing={this.state.refreshing}
-          />
-        </List>
-      </Container>
+      <ExplorerView
+        navigator={this.props.navigator}
+        events={events}
+        onLoadMore={this.handleLoadMore}
+        onRefresh={this.handleRefresh}
+        refreshing={refreshing}
+      />
     );
   };
 }
-
-const styles = StyleSheet.create({
-  avatar: {
-    margin: 5,
-  },
-  listitem: {
-    paddingVertical: 5,
-  },
-});
 
 export default Explorer;
