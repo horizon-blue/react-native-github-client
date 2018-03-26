@@ -8,6 +8,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
 import { from } from 'apollo-link';
+import { persistCache } from 'apollo-cache-persist';
 import { authFetch } from 'utils';
 
 const GITHUB_GRAPHQL_API = 'https://api.github.com/graphql';
@@ -68,6 +69,10 @@ const getClient = function() {
     )
     .then(fragmentMatcher => new InMemoryCache({ fragmentMatcher }))
     .then(cache => {
+      persistCache({
+        cache,
+        storage: AsyncStorage,
+      });
       this.client = new ApolloClient({
         link: from([
           onError(({ graphQLErrors, networkError }) => {
