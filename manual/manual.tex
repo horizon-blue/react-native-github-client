@@ -47,11 +47,33 @@
 
 The first thing the user should see when open the splash screen, which should persists until the app is finished loading. As in Figure~\ref{splash_screen} (and in the rest of the manual), the images are rendered using iPhone 6 simulator and iPhone X simulator, respectively.
 
+\section{Login Screens}
+
+Before entering the main app, you need to enter your GitHub username and password to login, as in Figure~\ref{login}.
+
+\imgh{0.45}{login}{login_iphoneX}{Login Screen}
+
+
+If login failed, you should see red underline for both input fields, as well as a pop-up error message, as in Figure~\ref{login_fail}
+
+\imgh{0.45}{login_fail}{login_fail_iphoneX}{Login Failed}
+
+
 \section{Initial Screens}
 
-After loading, you should be able to see the initial screen with two tabs. The first tab is the explore page, which have not been implemented yet. The second is the user page, which displays the information of the current viewer (Figure~\ref{initial_explore}).
+After login, you should be able to see the initial screen with two tabs. The first tab is the explore page, and the second is the user page, which displays the information of the current viewer (Figure~\ref{initial_explore}).
 
 \imgh{0.45}{initial_explore}{initial_user}{Initial User Screen (iPhone 6)}
+
+\section{Search Page}
+
+After clicking the search button at the top right corner of explore page, you should be able to navigate to the search page, as shown in Figure~\ref{search}
+
+\imgh{0.45}{search}{search_iphoneX}{Search}
+
+The two tabs at search page filter the search result to repository/user respectively, as shown in Figure~\ref{search_repository}
+
+\imgh{0.45}{search_repository}{search_user}{Search Result}
 
 \section{User Page}
 
@@ -83,6 +105,10 @@ The landscape mode should contain the same information as in the portrait mode, 
 
 \imgh{0.45}{landscape_follower_iphoneX}{landscape_follower_iphoneX_right}{Follower Landscape Mode (iPhone X)}
 
+In addition, each row can be swipe left to review the follow/unfollow button (depending on current following status), as shown in Figure~\ref{user_list_buttons}
+
+\img{0.45}{user_list_buttons}{Follow/Unfollow User}
+
 \subsection{Following Page}
 
 The following page should looks almost identical to the follow page except for the title and the list of users, as in Figure~\ref{following}.
@@ -112,6 +138,10 @@ The information displayed in landscape mode should be the same as those displaye
 
 \imgh{0.45}{landscape_starred_iphoneX}{landscape_starred_iphoneX_right}{Starred Repositories Landscape Mode (iPhone X)}.
 
+In addition, each row can be swipe left to review the star/unstar button (depending on current following status), as shown in Figure~\ref{repository_button}
+
+\img{0.45}{repository_button}{Star/Unstar User}
+
 \subsection{Owned Repositories}
 
 Owned repositories page should look almost identical to the starred repositories page, except that the title is different, the content belongs to the user, and it may contain private repositories - which are displayed with yellow background, as in Figure~\ref{owned_repositories}.
@@ -120,7 +150,11 @@ Owned repositories page should look almost identical to the starred repositories
 
 \subsection{Web View}
 
-When user press the item in repository view, the app should open the corresponding page in a web view. The viewer still have the access to the navigation bar, which can be use to go back to the repository list page or open the web page in external browser, as shown in Figure~\ref{webview}. Due to security reason, the web view can only display web pages with SSL. URLs that starts with \texttt{http://} will be opened in external browser instead.
+When user press the item in repository view, the app should open the corresponding page in a safari view, as in Figure~\ref{safariview}.
+
+\imgh{0.45}{safariview}{safariview_iphoneX}{Web View}
+
+If Safari View is not avaliable, it will fall back to webview. The viewer still have the access to the navigation bar, which can be use to go back to the repository list page or open the web page in external browser, as shown in Figure~\ref{webview}. Due to security reason, the web view can only display web pages with SSL. URLs that starts with \texttt{http://} will be opened in external browser instead.
 
 \imgh{0.45}{webview}{webview_iphoneX}{Web View}
 

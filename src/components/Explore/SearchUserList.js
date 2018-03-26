@@ -39,7 +39,7 @@ class SearchUserList extends PureComponent<Props> {
     return !this.props.query ? null : loading ? (
       <Text>Loading...</Text>
     ) : error ? (
-      <Text>{error}</Text>
+      <Text>{error.message}</Text>
     ) : (
       <UserListView
         users={data.search.edges}
