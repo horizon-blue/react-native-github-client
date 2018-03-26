@@ -5,6 +5,38 @@ import RepositoryListView from '../src/components/Repository/RepositoryListView'
 
 import renderer from 'react-test-renderer';
 
+it('repository list view render correctly', () => {
+  expect(
+    renderer
+      .create(
+        <ApolloProvider client={{}}>
+          <RepositoryListView
+            refetch={() => null}
+            fetchMore={() => null}
+            repositories={repoList}
+          />
+        </ApolloProvider>
+      )
+      .toJSON()
+  ).toMatchSnapshot();
+});
+
+it('repository list empty', () => {
+  expect(
+    renderer
+      .create(
+        <ApolloProvider client={{}}>
+          <RepositoryListView
+            refetch={() => null}
+            fetchMore={() => null}
+            repositories={[]}
+          />
+        </ApolloProvider>
+      )
+      .toJSON()
+  ).toMatchSnapshot();
+});
+
 const repoList = [
   {
     node: {
@@ -43,35 +75,3 @@ const repoList = [
     },
   },
 ];
-
-it('repository list view render correctly', () => {
-  expect(
-    renderer
-      .create(
-        <ApolloProvider client={{}}>
-          <RepositoryListView
-            refetch={() => null}
-            fetchMore={() => null}
-            repositories={repoList}
-          />
-        </ApolloProvider>
-      )
-      .toJSON()
-  ).toMatchSnapshot();
-});
-
-it('repository list empty', () => {
-  expect(
-    renderer
-      .create(
-        <ApolloProvider client={{}}>
-          <RepositoryListView
-            refetch={() => null}
-            fetchMore={() => null}
-            repositories={[]}
-          />
-        </ApolloProvider>
-      )
-      .toJSON()
-  ).toMatchSnapshot();
-});

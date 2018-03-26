@@ -4,29 +4,6 @@ import UserListView from '../src/components/User/UserListView';
 
 import renderer from 'react-test-renderer';
 
-const userList = [
-  {
-    node: {
-      id: 'asdf',
-      name: 'foo bar',
-      login: 'asdf',
-      viewerIsFollowing: true,
-      avatarUrl: '',
-      bio: 'Computational statistician, programmer and data scientist.',
-    },
-  },
-  {
-    node: {
-      id: 'fooo',
-      name: 'a',
-      login: 'asdf',
-      viewerIsFollowing: false,
-      avatarUrl: 'ad/',
-      bio: '',
-    },
-  },
-];
-
 it('user list view render correctly', () => {
   expect(
     renderer
@@ -50,3 +27,26 @@ it('user list empty', () => {
       .toJSON()
   ).toMatchSnapshot();
 });
+
+const userList = [
+  {
+    node: {
+      id: 'asdf',
+      name: 'foo bar',
+      login: 'asdf',
+      viewerIsFollowing: true,
+      avatarUrl: '',
+      bio: 'Computational statistician, programmer and data scientist.',
+    },
+  },
+  {
+    node: {
+      id: 'fooo',
+      name: 'a',
+      login: 'asdf',
+      viewerIsFollowing: false,
+      avatarUrl: 'ad/',
+      bio: '',
+    },
+  },
+];
