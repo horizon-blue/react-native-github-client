@@ -49,7 +49,7 @@ const run = () => {
 };
 
 // load the icons and start the main app
-loadIcons(['user', 'globe', 'search'])
+loadIcons(['user', 'globe', 'search', 'bell'])
   .then(resources => (icons = resources))
   .then(() => SplashScreen.hide())
   .then(login)

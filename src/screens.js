@@ -3,7 +3,8 @@ import { ApolloProvider } from 'react-apollo';
 import type { Node } from 'react';
 
 import { User, UserList, Login } from './components/User';
-import { Explorer, Search } from './components/Explore';
+import { Explorer } from './components/Explore';
+import { Search } from './components/Search';
 import { RepositoryList } from './components/Repository';
 import { WebView, BrowserButton } from './components/WebView';
 
