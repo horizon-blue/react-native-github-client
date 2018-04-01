@@ -121,10 +121,11 @@ class RepositoryListView extends PureComponent<Props> {
 
   render = () => {
     return (
-      <List>
+      <List style={styles.listContainer}>
         <FlatList
           data={this.props.repositories}
           renderItem={this.renderRepo}
+          ListEmptyComponent={<Text>No Content</Text>}
           keyExtractor={this.repoKeyExtractor}
           onEndReached={this.props.fetchMore(this)}
           onRefresh={this.props.refetch(this)}
@@ -144,6 +145,9 @@ const styles = StyleSheet.create({
   description: { marginVertical: 10 },
   bottomTag: { flexDirection: 'row' },
   bottomTagText: { fontSize: 14, marginRight: 10, marginLeft: 3 },
+  listContainer: {
+    flex: 1,
+  },
 });
 
 export default RepositoryListView;

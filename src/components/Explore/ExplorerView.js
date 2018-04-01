@@ -130,10 +130,11 @@ class ExplorerView extends PureComponent<Props> {
 
   render = () => (
     <Container>
-      <List>
+      <List style={styles.listContainer}>
         <FlatList
           data={this.props.events}
           keyExtractor={this.eventKeyExtractor}
+          ListEmptyComponent={<Text>No Content</Text>}
           renderItem={this.renderEvent}
           onEndReached={this.props.onLoadMore}
           onRefresh={this.props.onRefresh}
@@ -150,6 +151,9 @@ const styles = StyleSheet.create({
   },
   listitem: {
     paddingVertical: 5,
+  },
+  listContainer: {
+    flex: 1,
   },
 });
 

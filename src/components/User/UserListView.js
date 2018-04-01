@@ -98,10 +98,11 @@ class UserListView extends PureComponent<Props> {
   );
 
   render = () => (
-    <List>
+    <List style={styles.listContainer}>
       <FlatList
         data={this.props.users}
         renderItem={this.renderUser}
+        ListEmptyComponent={<Text>No Content</Text>}
         keyExtractor={this.userKeyExtractor}
         onEndReached={this.props.fetchMore(this)}
         onRefresh={this.props.refetch(this)}
@@ -123,6 +124,9 @@ const styles = StyleSheet.create({
   },
   usernameText: {
     color: 'gray',
+  },
+  listContainer: {
+    flex: 1,
   },
 });
 
