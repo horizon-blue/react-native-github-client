@@ -43,13 +43,21 @@ const run = () => {
         passProps: {
           logout,
         },
+        navigatorButtons: {
+          rightButtons: [
+            {
+              id: 'notification',
+              icon: icons.inbox,
+            },
+          ],
+        },
       },
     ],
   });
 };
 
 // load the icons and start the main app
-loadIcons(['user', 'globe', 'search', 'bell'])
+loadIcons(['user', 'globe', 'search', 'inbox'])
   .then(resources => (icons = resources))
   .then(() => SplashScreen.hide())
   .then(login)

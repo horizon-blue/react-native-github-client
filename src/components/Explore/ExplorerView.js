@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { List, Text, ListItem, Left, Body, Thumbnail } from 'native-base';
 import moment from 'moment';
-import Container from 'SafeContainer';
 import { openWebView } from 'utils';
 
 type Props = {
@@ -129,19 +128,17 @@ class ExplorerView extends PureComponent<Props> {
   eventKeyExtractor = event => event.id;
 
   render = () => (
-    <Container>
-      <List style={styles.listContainer}>
-        <FlatList
-          data={this.props.events}
-          keyExtractor={this.eventKeyExtractor}
-          ListEmptyComponent={<Text>No Content</Text>}
-          renderItem={this.renderEvent}
-          onEndReached={this.props.onLoadMore}
-          onRefresh={this.props.onRefresh}
-          refreshing={this.props.refreshing}
-        />
-      </List>
-    </Container>
+    <List style={styles.listContainer}>
+      <FlatList
+        data={this.props.events}
+        keyExtractor={this.eventKeyExtractor}
+        ListEmptyComponent={<Text>No Content</Text>}
+        renderItem={this.renderEvent}
+        onEndReached={this.props.onLoadMore}
+        onRefresh={this.props.onRefresh}
+        refreshing={this.props.refreshing}
+      />
+    </List>
   );
 }
 

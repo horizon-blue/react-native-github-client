@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Text } from 'native-base';
 import { AsyncStorage } from 'react-native';
+import Container from 'SafeContainer';
 import { getEvent } from './queries';
 import { addLogoutListener, removeLogoutListener } from '../../auth';
 import ExplorerView from './ExplorerView';
@@ -20,6 +21,7 @@ class Explorer extends PureComponent<Props> {
     events: [],
     refreshing: false,
   };
+
   componentDidMount = () => {
     AsyncStorage.getItem('events')
       .then(events =>
@@ -46,7 +48,7 @@ class Explorer extends PureComponent<Props> {
   onNavigatorEvent = ({ type, id }) => {
     if (type === 'NavBarButtonPress' && id === 'search') {
       this.props.navigator.push({
-        screen: 'explore.search',
+        screen: 'search',
         title: 'Search',
       });
     }
@@ -91,20 +93,24 @@ class Explorer extends PureComponent<Props> {
   render = () => {
     const { error, events, refreshing } = this.state;
 
-    return events.length === 0 ? (
-      error ? (
-        <Text>{error}</Text>
-      ) : (
-        <Text>Loading...</Text>
-      )
-    ) : (
-      <ExplorerView
-        navigator={this.props.navigator}
-        events={events}
-        onLoadMore={this.handleLoadMore}
-        onRefresh={this.handleRefresh}
-        refreshing={refreshing}
-      />
+    return (
+      <Container>
+        {events.length === 0 ? (
+          error ? (
+            <Text>{error}</Text>
+          ) : (
+            <Text>Loading...</Text>
+          )
+        ) : (
+          <ExplorerView
+            navigator={this.props.navigator}
+            events={events}
+            onLoadMore={this.handleLoadMore}
+            onRefresh={this.handleRefresh}
+            refreshing={refreshing}
+          />
+        )}
+      </Container>
     );
   };
 }

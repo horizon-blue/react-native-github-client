@@ -63,6 +63,20 @@ class User extends PureComponent<Props> {
   state = {
     refreshing: false,
   };
+
+  componentDidMount = () => {
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+  };
+
+  onNavigatorEvent = ({ type, id }) => {
+    if (type === 'NavBarButtonPress' && id === 'notification') {
+      this.props.navigator.push({
+        screen: 'notification',
+        title: 'Notification',
+      });
+    }
+  };
+
   /**
    * the function map the list of information avaliable for the user to
    * a list of React component. If any of the information is missing, it
