@@ -5,6 +5,5 @@ export const getNotification = (page = 1) =>
     params: {
       all: true,
       page,
-      per_page: 10,
     },
   });

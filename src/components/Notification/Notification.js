@@ -19,6 +19,7 @@ class Notification extends PureComponent<Props, State> {
   state = {
     notifications: [],
     refreshing: false,
+    message: 'Loading...',
   };
 
   componentDidMount = () => {
@@ -46,12 +47,13 @@ class Notification extends PureComponent<Props, State> {
             res.data,
             notification => notification.id
           ),
+          message: null,
           refreshing: false,
         });
       })
       .catch(err => {
         this.loading = false;
-        this.setState({ error: err.message, refreshing: false });
+        this.setState({ message: err.message, refreshing: false });
       });
   };
 
@@ -63,7 +65,7 @@ class Notification extends PureComponent<Props, State> {
       <NotificationView
         navigator={this.props.navigator}
         notifications={this.state.notifications}
-        error={this.state.error}
+        message={this.state.message}
         onLoadMore={this.handleLoadMore}
         onRefresh={this.handleRefresh}
         refreshing={this.state.refreshing}
