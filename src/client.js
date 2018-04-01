@@ -31,7 +31,7 @@ const authLink = setContext((_, { headers }) =>
  * @type {ApolloClient}
  */
 const getClient = function() {
-  if (this.client) return this.client;
+  if (this.client) return new Promise(resolve => resolve(this.client));
 
   // Get a fragment mathcer (for use in union type). Reference:
   // https://www.apollographql.com/docs/react/advanced/fragments.html#fragment-matcher

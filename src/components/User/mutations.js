@@ -16,21 +16,25 @@ const refreshUser = gql`
 export const followUser = login => () =>
   authFetch(`https://api.github.com/user/following/${login}`, 'put', {
     headers: { 'Content-Length': 0 },
-  }).then(() =>
-    getClient().query({
-      query: refreshUser,
-      fetchPolicy: 'network-only',
-      variables: { login },
-    })
-  );
+  })
+    .then(getClient)
+    .then(client =>
+      client.query({
+        query: refreshUser,
+        fetchPolicy: 'network-only',
+        variables: { login },
+      })
+    );
 
 export const unfollowUser = login => () =>
   authFetch(`https://api.github.com/user/following/${login}`, 'delete', {
     headers: { 'Content-Length': 0 },
-  }).then(() =>
-    getClient().query({
-      query: refreshUser,
-      fetchPolicy: 'network-only',
-      variables: { login },
-    })
-  );
+  })
+    .then(getClient)
+    .then(client =>
+      client.query({
+        query: refreshUser,
+        fetchPolicy: 'network-only',
+        variables: { login },
+      })
+    );

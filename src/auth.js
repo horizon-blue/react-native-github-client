@@ -33,7 +33,8 @@ export const removeLogoutListener = key => {
 export const logout = () => {
   AsyncStorage.removeItem('token')
     .then(login)
-    .then(getClient().resetStore)
+    .then(getClient)
+    .then(client => client.resetStore())
     // execute each callback
     .then(() => _.flow(_.values, _.forEach(callback => callback()))(onlogout))
     .catch(err => console.error(err));
