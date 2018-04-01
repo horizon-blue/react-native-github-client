@@ -44,7 +44,6 @@ class Search extends PureComponent<Props> {
       <View style={styles.searchContainer}>
         <Item rounded>
           <Input
-            autoFocus
             onChangeText={this.handleChangeQuery}
             value={this.state.text}
             autoCapitalize="none"
