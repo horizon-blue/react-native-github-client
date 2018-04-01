@@ -1,7 +1,7 @@
 import 'react-native';
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
-import Search from '../src/components/Explore/Search';
+import Search from '../src/components/Search/Search';
 import getClient from '../src/client';
 
 import renderer from 'react-test-renderer';

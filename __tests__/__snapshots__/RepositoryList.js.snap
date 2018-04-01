@@ -12,11 +12,25 @@ exports[`repository list empty 1`] = `
   previewFirstRow={false}
   recalculateHiddenLayout={false}
   rightOpenValue={0}
-  style={Object {}}
+  style={
+    Array [
+      Object {},
+      Object {
+        "flex": 1,
+      },
+    ]
+  }
   swipeToOpenPercent={50}
   virtual={undefined}
 >
   <RCTScrollView
+    ListEmptyComponent={
+      <Styled(Text)
+        virtual={undefined}
+      >
+        No Content
+      </Styled(Text)>
+    }
     data={Array []}
     disableVirtualization={false}
     getItem={[Function]}
@@ -44,7 +58,29 @@ exports[`repository list empty 1`] = `
     viewabilityConfigCallbackPairs={Array []}
     windowSize={21}
   >
-    <View />
+    <View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "#000",
+              "fontFamily": "System",
+              "fontSize": 16,
+            }
+          }
+          uppercase={false}
+          virtual={undefined}
+        >
+          No Content
+        </Text>
+      </View>
+    </View>
   </RCTScrollView>
 </View>
 `;
@@ -61,11 +97,25 @@ exports[`repository list view render correctly 1`] = `
   previewFirstRow={false}
   recalculateHiddenLayout={false}
   rightOpenValue={0}
-  style={Object {}}
+  style={
+    Array [
+      Object {},
+      Object {
+        "flex": 1,
+      },
+    ]
+  }
   swipeToOpenPercent={50}
   virtual={undefined}
 >
   <RCTScrollView
+    ListEmptyComponent={
+      <Styled(Text)
+        virtual={undefined}
+      >
+        No Content
+      </Styled(Text)>
+    }
     data={
       Array [
         Object {
