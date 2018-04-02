@@ -35,13 +35,15 @@ type Props = {
 const SORT_OPTIONS = [
   'Default',
   'Name: A - Z',
-  'Starred Count: High to Low',
+  'Stargazer Count: High to Low',
+  'Fork Count: High to Low',
   'Cancel',
 ];
 const SORT_FUNC = [
   null,
   ({ node }) => _.lowerCase(node.name),
   ({ node }) => -node.stargazers.totalCount,
+  ({ node }) => -node.forkCount,
 ];
 
 /**
