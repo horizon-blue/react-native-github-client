@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
-import _ from 'lodash';
+import _ from 'lodash/fp';
 import NotificationView from './NotificationView';
 import Container from 'SafeContainer';
-import { getNotification } from './queries';
+import { getNotification, getSingleNotification } from './queries';
+import { markAsRead } from './mutations';
 import { addLogoutListener, removeLogoutListener } from '../../auth';
 
 type Props = {
@@ -31,6 +32,19 @@ class Notification extends PureComponent<Props, State> {
     removeLogoutListener('refreshNotification');
   };
 
+  handleMarkAsRead = id => () =>
+    markAsRead(id)
+      .then(() => getSingleNotification(id))
+      .then(res => res.data)
+      .then(notification =>
+        this.setState({
+          notifications: _.map(item => (item.id === id ? notification : item))(
+            this.state.notifications
+          ),
+        })
+      )
+      .catch(err => console.warn(err));
+
   fetchNotification = (refresh = false) => {
     if (this.loading || this.state.refreshing) return;
     this.loading = true;
@@ -42,11 +56,9 @@ class Notification extends PureComponent<Props, State> {
         this.loading = false;
         this.page = page + 1;
         this.setState({
-          notifications: _.unionBy(
-            refresh ? [] : this.state.notifications,
-            res.data,
-            notification => notification.id
-          ),
+          notifications: _.unionBy(notification => notification.id)(
+            refresh ? [] : this.state.notifications
+          )(res.data),
           message: null,
           refreshing: false,
         });
@@ -69,6 +81,7 @@ class Notification extends PureComponent<Props, State> {
         onLoadMore={this.handleLoadMore}
         onRefresh={this.handleRefresh}
         refreshing={this.state.refreshing}
+        onMarkAsRead={this.handleMarkAsRead}
       />
     </Container>
   );

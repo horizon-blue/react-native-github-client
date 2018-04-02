@@ -18,12 +18,14 @@ type Props = {
   damping: Number,
   tension: Number,
   icon: ?{ name: String, text: String },
+  disabled: ?Boolean,
 };
 
 class SwipeRow extends PureComponent<Props> {
   static defaultProps = {
     damping: 0.4,
     tension: 300,
+    disabled: false,
   };
 
   _deltaX = new Animated.Value(0);
@@ -69,6 +71,7 @@ class SwipeRow extends PureComponent<Props> {
             <TouchableOpacity
               onPress={this.props.onPressButton}
               style={styles.button}
+              disabled={this.props.disabled}
             >
               <Icon size={32} name={this.props.icon.name} color="#fff" />
               <Text style={styles.text}>{this.props.icon.text}</Text>

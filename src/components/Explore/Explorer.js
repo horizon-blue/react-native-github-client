@@ -5,7 +5,7 @@ import Container from 'SafeContainer';
 import { getEvent } from './queries';
 import { addLogoutListener, removeLogoutListener } from '../../auth';
 import ExplorerView from './ExplorerView';
-import _ from 'lodash';
+import _ from 'lodash/fp';
 
 type Props = {
   navigator: Object,
@@ -69,11 +69,9 @@ class Explorer extends PureComponent<Props> {
         this.page = page + 1;
         this.setState(
           {
-            events: _.unionBy(
-              refresh ? [] : this.state.events,
-              res.data,
-              event => event.id
-            ),
+            events: _.unionBy(event => event.id)(
+              refresh ? [] : this.state.events
+            )(res.data),
             refreshing: false,
           },
           this.storeEvents

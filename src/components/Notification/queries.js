@@ -8,3 +8,6 @@ export const getNotification = (page = 1) =>
       page,
     },
   });
+
+export const getSingleNotification = id =>
+  authFetch(`https://api.github.com/notifications/threads/${id}`, 'get');
