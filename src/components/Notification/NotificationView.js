@@ -42,7 +42,10 @@ class NotificationView extends PureComponent<Props> {
         disabled={!item.unread}
       >
         <ListItem
-          onPress={openWebView(item.subject.html_url, this.props.navigator)}
+          onPress={openWebView(
+            item.subject.url.replace('api.github.com/repos', 'github.com'),
+            this.props.navigator
+          )}
         >
           <Grid>
             <Row>
