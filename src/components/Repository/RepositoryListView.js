@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   Text,
   List,
@@ -10,7 +10,9 @@ import {
   Input,
   Item,
   Icon,
+  ActionSheet,
 } from 'native-base';
+import Feather from 'react-native-vector-icons/Feather';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { Mutation } from 'react-apollo';
 import type { Node } from 'react';
@@ -29,6 +31,18 @@ type Props = {
   login: ?String,
   searchEnabled: ?Boolean,
 };
+
+const SORT_OPTIONS = [
+  'Default',
+  'Name: A - Z',
+  'Starred Count: High to Low',
+  'Cancel',
+];
+const SORT_FUNC = [
+  null,
+  ({ node }) => _.lowerCase(node.name),
+  ({ node }) => -node.stargazers.totalCount,
+];
 
 /**
  * Display a List of Repositories
@@ -137,12 +151,17 @@ class RepositoryListView extends PureComponent<Props> {
     </Mutation>
   );
 
-  handleChangeQuery = query =>
+  handleChangeQuery = query => this.setState({ query }, this.filterRepo);
+
+  filterRepo = () =>
+    (!!this.state.query || !!this.state.sortBy) &&
     this.setState({
-      query,
-      filtered: query
-        ? _.filter(this.props.repositories, this.repoFilter(query))
-        : undefined,
+      filtered: _.sortBy(
+        this.state.query
+          ? _.filter(this.props.repositories, this.repoFilter)
+          : this.props.repositories,
+        ...[this.state.sortBy]
+      ),
     });
 
   repoFilter = query => ({ node }) =>
@@ -153,15 +172,32 @@ class RepositoryListView extends PureComponent<Props> {
       _.lowerCase(query)
     );
 
+  handlePressFunnel = () =>
+    ActionSheet.show(
+      {
+        options: SORT_OPTIONS,
+        title: 'Sorted By...',
+        cancelButtonIndex: SORT_OPTIONS.length - 1,
+      },
+      this.handleSelectOption
+    );
+
+  handleSelectOption = buttonIndex =>
+    buttonIndex !== SORT_OPTIONS.length - 1 &&
+    this.setState({ sortBy: SORT_FUNC[buttonIndex] }, this.filterRepo);
+
   renderSearchBar = () => (
-    <Item>
-      <Icon active name="search" style={styles.icon} />
+    <Item style={styles.searchBar}>
+      <Icon active name="search" />
       <Input
         placeholder="Begin Searching..."
         onChangeText={this.handleChangeQuery}
         value={this.state.query}
         placeholderTextColor="darkgrey"
       />
+      <TouchableOpacity onPress={this.handlePressFunnel}>
+        <Feather name="filter" size={23} color="#1780FB" />
+      </TouchableOpacity>
     </Item>
   );
 
@@ -169,7 +205,7 @@ class RepositoryListView extends PureComponent<Props> {
     <List style={styles.listContainer}>
       <FlatList
         data={
-          this.props.searchEnabled && this.state.query
+          this.props.searchEnabled && (this.state.query || this.state.sortBy)
             ? this.state.filtered
             : this.props.repositories
         }
@@ -189,9 +225,6 @@ const styles = StyleSheet.create({
   privateRepo: {
     backgroundColor: '#FFFDF0',
   },
-  icon: {
-    marginLeft: 10,
-  },
   listItem: { paddingRight: 10 },
   repoName: { fontWeight: 'bold', marginLeft: 5 },
   description: { marginVertical: 10 },
@@ -199,6 +232,10 @@ const styles = StyleSheet.create({
   bottomTagText: { fontSize: 14, marginRight: 10, marginLeft: 3 },
   listContainer: {
     flex: 1,
+  },
+  searchBar: {
+    marginLeft: 10,
+    marginRight: 10,
   },
 });
 
