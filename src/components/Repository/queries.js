@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { authFetch } from 'utils';
 
 export const repoFields = `
   id
@@ -12,6 +13,7 @@ export const repoFields = `
     name
   }
   owner {
+    id
     login
   }
   url
@@ -49,9 +51,28 @@ export const getQuery = (
 `;
 
 export const getRepository = gql`
-query($owner: String!, $name: String!) {
-  repository(owner: $owner, name: $name) {
-    ${repoFields}
+  query($owner: String!, $name: String!) {
+    repository(owner: $owner, name: $name) {
+      id
+      nameWithOwner
+      description
+      viewerHasStarred
+      primaryLanguage {
+        id
+        color
+        name
+      }
+      url
+      forkCount
+      stargazers {
+        totalCount
+      }
+    }
   }
-}
 `;
+
+export const getCommitActivity = (owner, name) =>
+  authFetch(
+    `https://api.github.com/repos/${owner}/${name}/stats/commit_activity`,
+    'get'
+  );

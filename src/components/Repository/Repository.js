@@ -12,9 +12,9 @@ import {
   View,
 } from 'native-base';
 import { graphql, Mutation } from 'react-apollo';
-import { VictoryBar } from 'victory-native';
+import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
 import Octicons from 'react-native-vector-icons/Octicons';
-import { getRepository } from './queries';
+import { getRepository, getCommitActivity } from './queries';
 import Container from 'SafeContainer';
 import { openWebView } from 'utils';
 import { addStar, removeStar } from './mutations';
@@ -25,6 +25,8 @@ type Props = {
     error: ?String,
     repository: ?Object,
   },
+  owner: String,
+  name: String,
   navigator: Object,
 };
 
@@ -37,6 +39,34 @@ type Props = {
   }),
 })
 class Repository extends PureComponent<Props> {
+  state = {};
+
+  componentDidMount = () => {
+    this.handleGetCommitActivity();
+  };
+
+  componentWillUnmount = () => {
+    clearTimeout(this.commitActivityTimer);
+  };
+
+  handleGetCommitActivity = () =>
+    getCommitActivity(this.props.owner, this.props.name)
+      .then(
+        res =>
+          res.status === 202
+            ? (this.commitActivityTimer = setTimeout(
+                this.handleGetCommitActivity,
+                1000
+              ))
+            : this.setState({
+                commitActivity: res.data.map((value, idx) => ({
+                  x: idx + 1,
+                  y: value.total,
+                })),
+              })
+      )
+      .catch(err => console.log(err.message));
+
   render = () => {
     const { loading, error, repository } = this.props.data;
 
@@ -93,9 +123,26 @@ class Repository extends PureComponent<Props> {
                 </Row>
               </Grid>
             </ListItem>
-            <ListItem>
-              <VictoryBar />
-            </ListItem>
+            {!!this.state.commitActivity && (
+              <ListItem>
+                <Grid>
+                  <Row>
+                    <Text>Number of Commits Over Weeks</Text>
+                  </Row>
+                  <Row>
+                    <VictoryChart theme={VictoryTheme.material}>
+                      <VictoryLine
+                        style={{
+                          data: { stroke: '#1780FB' },
+                          parent: { border: '1px solid #ccc' },
+                        }}
+                        data={this.state.commitActivity}
+                      />
+                    </VictoryChart>
+                  </Row>
+                </Grid>
+              </ListItem>
+            )}
             <Grid>
               <Row style={styles.buttonBottom}>
                 <Col style={styles.buttonLeft}>
