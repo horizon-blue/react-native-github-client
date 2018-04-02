@@ -11,6 +11,9 @@ export const repoFields = `
     color
     name
   }
+  owner {
+    login
+  }
   url
   isPrivate
   forkCount
@@ -43,4 +46,12 @@ export const getQuery = (
       }
     }
   }
+`;
+
+export const getRepository = gql`
+query($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    ${repoFields}
+  }
+}
 `;

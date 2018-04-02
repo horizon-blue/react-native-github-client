@@ -67,6 +67,13 @@ class RepositoryListView extends PureComponent<Props> {
    */
   repoKeyExtractor = repo => repo.node.id;
 
+  handlePressRepository = repo => () =>
+    this.props.navigator.push({
+      screen: 'profile.repository',
+      title: repo.name,
+      passProps: { owner: repo.owner.login, name: repo.name },
+    });
+
   /**
    * Renders the user object into a row in the list
    * @param  {Object} item the object containing information for each repository
@@ -96,7 +103,7 @@ class RepositoryListView extends PureComponent<Props> {
                 }
               >
                 <ListItem
-                  onPress={openWebView(node.url, this.props.navigator)}
+                  onPress={this.handlePressRepository(node)}
                   style={styles.listItem}
                 >
                   <Grid>

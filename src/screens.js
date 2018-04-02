@@ -5,7 +5,7 @@ import type { Node } from 'react';
 import { User, UserList, Login } from './components/User';
 import { Explorer } from './components/Explore';
 import { Search } from './components/Search';
-import { RepositoryList } from './components/Repository';
+import { RepositoryList, Repository } from './components/Repository';
 import { Notification } from './components/Notification';
 import { WebView, BrowserButton } from './components/WebView';
 
@@ -38,6 +38,7 @@ export const registerGraphQLScreens = client => {
   registerPage('explore', Explorer);
   registerPage('search', Search);
   registerPage('notification', Notification);
+  registerPage('profile.repository', Repository);
   registerPage('profile.repository.list', RepositoryList);
   registerPage('profile.webview', WebView);
 };
