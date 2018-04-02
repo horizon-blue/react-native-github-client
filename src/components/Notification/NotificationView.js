@@ -3,7 +3,7 @@ import { StyleSheet, FlatList } from 'react-native';
 import { List, Text, ListItem, Row, Grid } from 'native-base';
 import Octicons from 'react-native-vector-icons/Octicons';
 import moment from 'moment';
-import _ from 'lodash';
+import _ from 'lodash/fp';
 import { openWebView } from 'utils';
 
 type Props = {

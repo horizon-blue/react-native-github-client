@@ -12,6 +12,6 @@ const RepositoryWithQuery = warpQueries(getQuery, 'repoType', 'repositories')(
 
 export default props => (
   <Container>
-    <RepositoryWithQuery {...props} />
+    <RepositoryWithQuery {...props} searchEnabled />
   </Container>
 );

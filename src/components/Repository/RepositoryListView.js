@@ -1,9 +1,20 @@
 import React, { PureComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
-import { Text, List, ListItem, Grid, Row, View } from 'native-base';
+import {
+  Text,
+  List,
+  ListItem,
+  Grid,
+  Row,
+  View,
+  Input,
+  Item,
+  Icon,
+} from 'native-base';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { Mutation } from 'react-apollo';
 import type { Node } from 'react';
+import _ from 'lodash';
 
 import { addStar, removeStar } from './mutations';
 import { openWebView } from 'utils';
@@ -16,6 +27,7 @@ type Props = {
   navigator: Object,
   repoType: ?String,
   login: ?String,
+  searchEnabled: ?Boolean,
 };
 
 /**
@@ -23,8 +35,14 @@ type Props = {
  * @extends PureComponent
  */
 class RepositoryListView extends PureComponent<Props> {
+  static defaultProps = {
+    search: false,
+  };
+
   state = {
     refreshing: false,
+    filtered: [],
+    query: '',
   };
   /**
    * Used in FlatList to make sure that each repo has a distinct key
@@ -119,26 +137,60 @@ class RepositoryListView extends PureComponent<Props> {
     </Mutation>
   );
 
-  render = () => {
-    return (
-      <List style={styles.listContainer}>
-        <FlatList
-          data={this.props.repositories}
-          renderItem={this.renderRepo}
-          ListEmptyComponent={<Text>No Content</Text>}
-          keyExtractor={this.repoKeyExtractor}
-          onEndReached={this.props.fetchMore(this)}
-          onRefresh={this.props.refetch(this)}
-          refreshing={this.state.refreshing}
-        />
-      </List>
+  handleChangeQuery = query =>
+    this.setState({
+      query,
+      filtered: query
+        ? _.filter(this.props.repositories, this.repoFilter(query))
+        : undefined,
+    });
+
+  repoFilter = query => ({ node }) =>
+    _.includes(
+      _.lowerCase(
+        this.props.repoType === 'repositories' ? node.name : node.nameWithOwner
+      ),
+      _.lowerCase(query)
     );
-  };
+
+  renderSearchBar = () => (
+    <Item>
+      <Icon active name="search" style={styles.icon} />
+      <Input
+        placeholder="Begin Searching..."
+        onChangeText={this.handleChangeQuery}
+        value={this.state.query}
+        placeholderTextColor="darkgrey"
+      />
+    </Item>
+  );
+
+  render = () => (
+    <List style={styles.listContainer}>
+      <FlatList
+        data={
+          this.props.searchEnabled && this.state.query
+            ? this.state.filtered
+            : this.props.repositories
+        }
+        renderItem={this.renderRepo}
+        ListHeaderComponent={this.props.searchEnabled && this.renderSearchBar}
+        ListEmptyComponent={<Text>No Content</Text>}
+        keyExtractor={this.repoKeyExtractor}
+        onEndReached={this.props.fetchMore(this)}
+        onRefresh={this.props.refetch(this)}
+        refreshing={this.state.refreshing}
+      />
+    </List>
+  );
 }
 
 const styles = StyleSheet.create({
   privateRepo: {
     backgroundColor: '#FFFDF0',
+  },
+  icon: {
+    marginLeft: 10,
   },
   listItem: { paddingRight: 10 },
   repoName: { fontWeight: 'bold', marginLeft: 5 },
