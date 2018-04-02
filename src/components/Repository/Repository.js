@@ -17,7 +17,9 @@ import {
   VictoryLine,
   VictoryTheme,
   VictoryLabel,
+  VictoryAxis,
 } from 'victory-native';
+import moment from 'moment';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { getRepository, getCommitActivity } from './queries';
 import Container from 'SafeContainer';
@@ -64,10 +66,7 @@ class Repository extends PureComponent<Props> {
                 1000
               ))
             : this.setState({
-                commitActivity: res.data.map((value, idx) => ({
-                  x: idx + 1,
-                  y: value.total,
-                })),
+                commitActivity: res.data,
               })
       )
       .catch(err => console.log(err.message));
@@ -78,12 +77,16 @@ class Repository extends PureComponent<Props> {
       <ListItem>
         <VictoryChart theme={VictoryTheme.material}>
           <VictoryLabel x={25} y={24} text="Number of Commits Over Weeks" />
+          <VictoryAxis tickFormat={x => moment.unix(x).format('MMM')} />
+          <VictoryAxis dependentAxis />
           <VictoryLine
             style={{
               data: { stroke: '#1780FB' },
               parent: { border: '1px solid #ccc' },
             }}
             data={this.state.commitActivity}
+            x="week"
+            y="total"
           />
         </VictoryChart>
       </ListItem>
