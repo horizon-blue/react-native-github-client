@@ -74,22 +74,20 @@ class Repository extends PureComponent<Props> {
   renderCommitActivity = () => {
     if (!this.state.commitActivity) return null;
     return (
-      <ListItem>
-        <VictoryChart theme={VictoryTheme.material}>
-          <VictoryLabel x={25} y={24} text="Number of Commits Over Weeks" />
-          <VictoryAxis tickFormat={x => moment.unix(x).format('MMM')} />
-          <VictoryAxis dependentAxis />
-          <VictoryLine
-            style={{
-              data: { stroke: '#1780FB' },
-              parent: { border: '1px solid #ccc' },
-            }}
-            data={this.state.commitActivity}
-            x="week"
-            y="total"
-          />
-        </VictoryChart>
-      </ListItem>
+      <VictoryChart theme={VictoryTheme.material}>
+        <VictoryLabel x={25} y={24} text="Number of Commits Over Weeks" />
+        <VictoryAxis tickFormat={x => moment.unix(x).format('MMM')} />
+        <VictoryAxis dependentAxis tickFormat={y => parseInt(y)} />
+        <VictoryLine
+          style={{
+            data: { stroke: '#1780FB' },
+            parent: { border: '1px solid #ccc' },
+          }}
+          data={this.state.commitActivity}
+          x="week"
+          y="total"
+        />
+      </VictoryChart>
     );
   };
 
@@ -210,7 +208,12 @@ const styles = StyleSheet.create({
   repoName: { fontWeight: 'bold', marginLeft: 5 },
   description: { marginVertical: 10, color: 'grey' },
   buttonLeft: { borderRightWidth: 1, borderRightColor: '#E0E0E0' },
-  buttonBottom: { borderBottomWidth: 1, borderBottomColor: '#E0E0E0' },
+  buttonBottom: {
+    borderTopWidth: 1,
+    borderTopColor: '#E0E0E0',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
   bottomTag: { flexDirection: 'row' },
   bottomTagText: { fontSize: 14, marginRight: 10, marginLeft: 3 },
 });
