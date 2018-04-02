@@ -4,6 +4,9 @@ export const userFields = `
 id
 name
 login
+followers {
+  totalCount
+}
 viewerIsFollowing
 avatarUrl
 bio

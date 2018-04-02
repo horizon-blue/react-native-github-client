@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   ListItem,
   List,
@@ -12,7 +12,9 @@ import {
   Input,
   Item,
   Icon,
+  ActionSheet,
 } from 'native-base';
+import Feather from 'react-native-vector-icons/Feather';
 import type { Node } from 'react';
 import SwipeRow from 'SwipeRow';
 import { followUser, unfollowUser } from './mutations';
@@ -30,6 +32,18 @@ type Props = {
   userType: ?String,
   searchEnabled: ?Boolean,
 };
+
+const SORT_OPTIONS = [
+  'Default',
+  'Name: A - Z',
+  'Follower Count: High to Low',
+  'Cancel',
+];
+const SORT_FUNC = [
+  null,
+  ({ node }) => _.lowerCase(node.login),
+  ({ node }) => -node.followers.totalCount,
+];
 
 /**
  * Display a List of Users
@@ -108,27 +122,50 @@ class UserListView extends PureComponent<Props> {
     </SwipeRow>
   );
 
-  handleChangeQuery = query =>
+  handleChangeQuery = query => this.setState({ query }, this.filterUser);
+
+  filterUser = () =>
+    (!!this.state.query || !!this.state.sortBy) &&
     this.setState({
-      query,
-      filtered: query
-        ? _.filter(this.props.users, this.repoFilter(query))
-        : undefined,
+      filtered: _.sortBy(
+        this.state.query
+          ? _.filter(this.props.users, this.userFilter)
+          : this.props.users,
+        ...[this.state.sortBy]
+      ),
     });
 
-  repoFilter = query => ({ node }) =>
-    _.includes(_.lowerCase(node.login), _.lowerCase(query)) ||
-    (node.name && _.includes(_.lowerCase(node.name), _.lowerCase(query)));
+  userFilter = ({ node }) =>
+    _.includes(_.lowerCase(node.login), _.lowerCase(this.state.query)) ||
+    (node.name &&
+      _.includes(_.lowerCase(node.name), _.lowerCase(this.state.query)));
+
+  handlePressFunnel = () =>
+    ActionSheet.show(
+      {
+        options: SORT_OPTIONS,
+        title: 'Sorted By...',
+        cancelButtonIndex: SORT_OPTIONS.length - 1,
+      },
+      this.handleSelectOption
+    );
+
+  handleSelectOption = buttonIndex =>
+    buttonIndex !== SORT_OPTIONS.length - 1 &&
+    this.setState({ sortBy: SORT_FUNC[buttonIndex] }, this.filterUser);
 
   renderSearchBar = () => (
-    <Item>
-      <Icon active name="search" style={styles.icon} />
+    <Item style={styles.searchBar}>
+      <Icon active name="search" />
       <Input
         placeholder="Begin Searching..."
         onChangeText={this.handleChangeQuery}
         value={this.state.query}
         placeholderTextColor="darkgrey"
       />
+      <TouchableOpacity onPress={this.handlePressFunnel}>
+        <Feather name="filter" size={23} color="#1780FB" />
+      </TouchableOpacity>
     </Item>
   );
 
@@ -136,7 +173,7 @@ class UserListView extends PureComponent<Props> {
     <List style={styles.listContainer}>
       <FlatList
         data={
-          this.props.searchEnabled && this.state.query
+          this.props.searchEnabled && (this.state.query || this.state.sortBy)
             ? this.state.filtered
             : this.props.users
         }
@@ -168,8 +205,9 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
   },
-  icon: {
+  searchBar: {
     marginLeft: 10,
+    marginRight: 10,
   },
 });
 

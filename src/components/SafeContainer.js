@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
-import { Container } from 'native-base';
+import { Container, Root } from 'native-base';
 import type { Node } from 'react';
 
 /**
@@ -13,7 +13,9 @@ import type { Node } from 'react';
  *                          outer Container
  */
 export default ({ children, ...props }: { children: Node }) => (
-  <Container {...props}>
-    <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>
-  </Container>
+  <Root>
+    <Container {...props}>
+      <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>
+    </Container>
+  </Root>
 );
