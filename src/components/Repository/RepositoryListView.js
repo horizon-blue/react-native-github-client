@@ -19,7 +19,6 @@ import type { Node } from 'react';
 import _ from 'lodash';
 
 import { addStar, removeStar } from './mutations';
-import { openWebView } from 'utils';
 import SwipeRow from 'SwipeRow';
 
 type Props = {
