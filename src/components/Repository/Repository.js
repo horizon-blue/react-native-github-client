@@ -12,7 +12,12 @@ import {
   View,
 } from 'native-base';
 import { graphql, Mutation } from 'react-apollo';
-import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
+import {
+  VictoryChart,
+  VictoryLine,
+  VictoryTheme,
+  VictoryLabel,
+} from 'victory-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 import { getRepository, getCommitActivity } from './queries';
 import Container from 'SafeContainer';
@@ -66,6 +71,24 @@ class Repository extends PureComponent<Props> {
               })
       )
       .catch(err => console.log(err.message));
+
+  renderCommitActivity = () => {
+    if (!this.state.commitActivity) return null;
+    return (
+      <ListItem>
+        <VictoryChart theme={VictoryTheme.material}>
+          <VictoryLabel x={25} y={24} text="Number of Commits Over Weeks" />
+          <VictoryLine
+            style={{
+              data: { stroke: '#1780FB' },
+              parent: { border: '1px solid #ccc' },
+            }}
+            data={this.state.commitActivity}
+          />
+        </VictoryChart>
+      </ListItem>
+    );
+  };
 
   render = () => {
     const { loading, error, repository } = this.props.data;
@@ -123,26 +146,7 @@ class Repository extends PureComponent<Props> {
                 </Row>
               </Grid>
             </ListItem>
-            {!!this.state.commitActivity && (
-              <ListItem>
-                <Grid>
-                  <Row>
-                    <Text>Number of Commits Over Weeks</Text>
-                  </Row>
-                  <Row>
-                    <VictoryChart theme={VictoryTheme.material}>
-                      <VictoryLine
-                        style={{
-                          data: { stroke: '#1780FB' },
-                          parent: { border: '1px solid #ccc' },
-                        }}
-                        data={this.state.commitActivity}
-                      />
-                    </VictoryChart>
-                  </Row>
-                </Grid>
-              </ListItem>
-            )}
+            {this.renderCommitActivity()}
             <Grid>
               <Row style={styles.buttonBottom}>
                 <Col style={styles.buttonLeft}>
