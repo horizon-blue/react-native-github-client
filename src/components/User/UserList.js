@@ -11,6 +11,6 @@ const UserWithQuery = warpQueries(getQuery, 'userType', 'users')(UserListView)([
 
 export default props => (
   <Container>
-    <UserWithQuery {...props} />
+    <UserWithQuery {...props} searchEnabled />
   </Container>
 );

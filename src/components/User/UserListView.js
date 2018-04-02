@@ -9,11 +9,15 @@ import {
   Right,
   Thumbnail,
   Row,
+  Input,
+  Item,
+  Icon,
 } from 'native-base';
 import type { Node } from 'react';
 import SwipeRow from 'SwipeRow';
 import { followUser, unfollowUser } from './mutations';
 import { openWebView } from 'utils';
+import _ from 'lodash';
 
 type Props = {
   data: {
@@ -24,6 +28,7 @@ type Props = {
   refetch: Node => null,
   navigator: Object,
   userType: ?String,
+  searchEnabled: ?Boolean,
 };
 
 /**
@@ -31,8 +36,14 @@ type Props = {
  * @extends PureComponent
  */
 class UserListView extends PureComponent<Props> {
+  static defaultProps = {
+    search: false,
+  };
+
   state = {
     refreshing: false,
+    query: '',
+    filtered: [],
   };
 
   /**
@@ -97,11 +108,40 @@ class UserListView extends PureComponent<Props> {
     </SwipeRow>
   );
 
+  handleChangeQuery = query =>
+    this.setState({
+      query,
+      filtered: query
+        ? _.filter(this.props.users, this.repoFilter(query))
+        : undefined,
+    });
+
+  repoFilter = query => ({ node }) =>
+    _.includes(_.lowerCase(node.login), _.lowerCase(query)) ||
+    (node.name && _.includes(_.lowerCase(node.name), _.lowerCase(query)));
+
+  renderSearchBar = () => (
+    <Item>
+      <Icon active name="search" style={styles.icon} />
+      <Input
+        placeholder="Begin Searching..."
+        onChangeText={this.handleChangeQuery}
+        value={this.state.query}
+        placeholderTextColor="darkgrey"
+      />
+    </Item>
+  );
+
   render = () => (
     <List style={styles.listContainer}>
       <FlatList
-        data={this.props.users}
+        data={
+          this.props.searchEnabled && this.state.query
+            ? this.state.filtered
+            : this.props.users
+        }
         renderItem={this.renderUser}
+        ListHeaderComponent={this.props.searchEnabled && this.renderSearchBar}
         ListEmptyComponent={<Text>No Content</Text>}
         keyExtractor={this.userKeyExtractor}
         onEndReached={this.props.fetchMore(this)}
@@ -127,6 +167,9 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
+  },
+  icon: {
+    marginLeft: 10,
   },
 });
 
